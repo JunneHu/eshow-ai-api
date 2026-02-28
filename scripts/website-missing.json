@@ -1,0 +1,3337 @@
+[
+  {
+    "id": 11,
+    "toolKey": "platform_haisnap",
+    "name": "喵喵HaiSnap"
+  },
+  {
+    "id": 14,
+    "toolKey": "video_xiaoyun-latest",
+    "name": "小云链"
+  },
+  {
+    "id": 15,
+    "toolKey": "agent_leewow-latest",
+    "name": "Leewow"
+  },
+  {
+    "id": 16,
+    "toolKey": "agent_happycrapy-latest",
+    "name": "happycrapy"
+  },
+  {
+    "id": 17,
+    "toolKey": "platform_shuzhi-latest",
+    "name": "数智智能AI"
+  },
+  {
+    "id": 18,
+    "toolKey": "writing_doubao-writing",
+    "name": "豆包写作"
+  },
+  {
+    "id": 19,
+    "toolKey": "writing_xunfei-article",
+    "name": "讯飞作文"
+  },
+  {
+    "id": 21,
+    "toolKey": "writing_01agent-writing",
+    "name": "01Agent"
+  },
+  {
+    "id": 22,
+    "toolKey": "writing_writely",
+    "name": "奶酪写作"
+  },
+  {
+    "id": 23,
+    "toolKey": "writing_readpo",
+    "name": "ReadPo"
+  },
+  {
+    "id": 33,
+    "toolKey": "video_soundview",
+    "name": "SoundView"
+  },
+  {
+    "id": 36,
+    "toolKey": "office_picdoc",
+    "name": "PicDoc"
+  },
+  {
+    "id": 37,
+    "toolKey": "office_voxdecks",
+    "name": "VoxDeck"
+  },
+  {
+    "id": 38,
+    "toolKey": "office_desktopos-ai",
+    "name": "Desktopos AI"
+  },
+  {
+    "id": 39,
+    "toolKey": "agent_flowith",
+    "name": "Flowith"
+  },
+  {
+    "id": 42,
+    "toolKey": "chat_kimi",
+    "name": "Kimi 智能助手"
+  },
+  {
+    "id": 46,
+    "toolKey": "coding_bolt-new",
+    "name": "Bolt.new"
+  },
+  {
+    "id": 48,
+    "toolKey": "platform_coze",
+    "name": "Coze"
+  },
+  {
+    "id": 49,
+    "toolKey": "platform_fastgpt",
+    "name": "FastGPT"
+  },
+  {
+    "id": 50,
+    "toolKey": "platform_siliconflow",
+    "name": "SiliconFlow"
+  },
+  {
+    "id": 52,
+    "toolKey": "platform_trickle-ai",
+    "name": "Trickle AI"
+  },
+  {
+    "id": 53,
+    "toolKey": "design_figma-ai",
+    "name": "Figma AI"
+  },
+  {
+    "id": 55,
+    "toolKey": "design_uxbot",
+    "name": "UXbot"
+  },
+  {
+    "id": 57,
+    "toolKey": "design_gemdesign",
+    "name": "GemDesign"
+  },
+  {
+    "id": 59,
+    "toolKey": "audio_suno-audio",
+    "name": "Suno 音乐"
+  },
+  {
+    "id": 62,
+    "toolKey": "audio_text-to-speech",
+    "name": "TextToSpeech"
+  },
+  {
+    "id": 65,
+    "toolKey": "search_exa",
+    "name": "Exa AI"
+  },
+  {
+    "id": 66,
+    "toolKey": "search_devv",
+    "name": "Devv"
+  },
+  {
+    "id": 70,
+    "toolKey": "learn_kaggle",
+    "name": "Kaggle"
+  },
+  {
+    "id": 71,
+    "toolKey": "learn_udacity",
+    "name": "Udacity AI 学院"
+  },
+  {
+    "id": 73,
+    "toolKey": "models_llama",
+    "name": "Llama 系列"
+  },
+  {
+    "id": 74,
+    "toolKey": "models_gpt-4",
+    "name": "GPT-4 / GPT-4o"
+  },
+  {
+    "id": 75,
+    "toolKey": "models_gemma",
+    "name": "Gemma"
+  },
+  {
+    "id": 79,
+    "toolKey": "eval_mmlu",
+    "name": "MMLU"
+  },
+  {
+    "id": 80,
+    "toolKey": "eval_opencompass",
+    "name": "OpenCompass"
+  },
+  {
+    "id": 82,
+    "toolKey": "eval_helm",
+    "name": "HELM"
+  },
+  {
+    "id": 83,
+    "toolKey": "content-detect_originality-ai",
+    "name": "来自AI检测"
+  },
+  {
+    "id": 85,
+    "toolKey": "content-detect_smodin-detector",
+    "name": "Smodin AI Content Detector"
+  },
+  {
+    "id": 86,
+    "toolKey": "content-detect_sapling-detector",
+    "name": "Sapling AI Content Detector"
+  },
+  {
+    "id": 88,
+    "toolKey": "prompt_promptpilot",
+    "name": "PromptPilot"
+  },
+  {
+    "id": 92,
+    "toolKey": "prompt_snackprompt",
+    "name": "Snack Prompt"
+  },
+  {
+    "id": 93,
+    "toolKey": "writing_8204",
+    "name": "蛙蛙写作"
+  },
+  {
+    "id": 94,
+    "toolKey": "writing_6242",
+    "name": "讯飞绘文"
+  },
+  {
+    "id": 95,
+    "toolKey": "writing_3448",
+    "name": "笔灵AI写作"
+  },
+  {
+    "id": 97,
+    "toolKey": "writing_22626",
+    "name": "笔灵AI小说"
+  },
+  {
+    "id": 98,
+    "toolKey": "writing_49483",
+    "name": "稿定AI文案"
+  },
+  {
+    "id": 99,
+    "toolKey": "writing_53972",
+    "name": "笔目鱼"
+  },
+  {
+    "id": 100,
+    "toolKey": "writing_36409",
+    "name": "稿易AI论文"
+  },
+  {
+    "id": 101,
+    "toolKey": "writing_7358",
+    "name": "千笔AI论文"
+  },
+  {
+    "id": 102,
+    "toolKey": "writing_14679",
+    "name": "66AI论文"
+  },
+  {
+    "id": 103,
+    "toolKey": "writing_60799",
+    "name": "维普科创助手"
+  },
+  {
+    "id": 104,
+    "toolKey": "writing_56573",
+    "name": "沁言学术"
+  },
+  {
+    "id": 105,
+    "toolKey": "writing_7381",
+    "name": "茅茅虫"
+  },
+  {
+    "id": 106,
+    "toolKey": "writing_67418",
+    "name": "GetDraft"
+  },
+  {
+    "id": 107,
+    "toolKey": "writing_7244",
+    "name": "光速写作"
+  },
+  {
+    "id": 108,
+    "toolKey": "writing_61208",
+    "name": "YouMind"
+  },
+  {
+    "id": 109,
+    "toolKey": "writing_14504",
+    "name": "万能小in"
+  },
+  {
+    "id": 110,
+    "toolKey": "writing_62793",
+    "name": "墨问"
+  },
+  {
+    "id": 111,
+    "toolKey": "writing_70397",
+    "name": "材料星AI"
+  },
+  {
+    "id": 112,
+    "toolKey": "writing_66997",
+    "name": "FeelFish"
+  },
+  {
+    "id": 114,
+    "toolKey": "writing_66726",
+    "name": "落笔AI写作"
+  },
+  {
+    "id": 115,
+    "toolKey": "writing_18646",
+    "name": "小鱼AI写作"
+  },
+  {
+    "id": 116,
+    "toolKey": "writing_65468",
+    "name": "量子探险"
+  },
+  {
+    "id": 117,
+    "toolKey": "writing_68892",
+    "name": "社研通"
+  },
+  {
+    "id": 118,
+    "toolKey": "writing_65034",
+    "name": "Rubriq"
+  },
+  {
+    "id": 121,
+    "toolKey": "writing_67827",
+    "name": "讯飞文书"
+  },
+  {
+    "id": 123,
+    "toolKey": "writing_63152",
+    "name": "华文笔杆"
+  },
+  {
+    "id": 124,
+    "toolKey": "writing_64875",
+    "name": "千页小说AI"
+  },
+  {
+    "id": 126,
+    "toolKey": "writing_40039",
+    "name": "松果AI写作"
+  },
+  {
+    "id": 127,
+    "toolKey": "writing_62117",
+    "name": "公文宝"
+  },
+  {
+    "id": 129,
+    "toolKey": "writing_61164",
+    "name": "PaperXie智能写作"
+  },
+  {
+    "id": 131,
+    "toolKey": "writing_46",
+    "name": "Rytr"
+  },
+  {
+    "id": 132,
+    "toolKey": "writing_16451",
+    "name": "迅捷AI写作"
+  },
+  {
+    "id": 137,
+    "toolKey": "writing_15321",
+    "name": "墨狐AI"
+  },
+  {
+    "id": 138,
+    "toolKey": "writing_59730",
+    "name": "掌桥科研AI论文"
+  },
+  {
+    "id": 139,
+    "toolKey": "writing_59700",
+    "name": "灵犀速写"
+  },
+  {
+    "id": 142,
+    "toolKey": "writing_14618",
+    "name": "库宝AI工作助手"
+  },
+  {
+    "id": 144,
+    "toolKey": "writing_26114",
+    "name": "文状元"
+  },
+  {
+    "id": 145,
+    "toolKey": "writing_6316",
+    "name": "晓语台"
+  },
+  {
+    "id": 147,
+    "toolKey": "writing_608",
+    "name": "DeepL Write"
+  },
+  {
+    "id": 149,
+    "toolKey": "writing_23116",
+    "name": "有道翻译·AI写作"
+  },
+  {
+    "id": 151,
+    "toolKey": "writing_14511",
+    "name": "AI新媒体文章"
+  },
+  {
+    "id": 152,
+    "toolKey": "writing_2009",
+    "name": "魔撰写作"
+  },
+  {
+    "id": 153,
+    "toolKey": "writing_26065",
+    "name": "宙语Cosmos"
+  },
+  {
+    "id": 154,
+    "toolKey": "writing_5572",
+    "name": "灵构AI笔记"
+  },
+  {
+    "id": 155,
+    "toolKey": "writing_2097",
+    "name": "有道写作"
+  },
+  {
+    "id": 160,
+    "toolKey": "writing_2404",
+    "name": "爱创作"
+  },
+  {
+    "id": 161,
+    "toolKey": "writing_2940",
+    "name": "Verse"
+  },
+  {
+    "id": 163,
+    "toolKey": "writing_2195",
+    "name": "Cohesive"
+  },
+  {
+    "id": 165,
+    "toolKey": "writing_9744",
+    "name": "WritingPal"
+  },
+  {
+    "id": 166,
+    "toolKey": "writing_59",
+    "name": "Magic Write"
+  },
+  {
+    "id": 168,
+    "toolKey": "writing_1930",
+    "name": "奇妙文"
+  },
+  {
+    "id": 169,
+    "toolKey": "writing_575",
+    "name": "Spell.tools"
+  },
+  {
+    "id": 171,
+    "toolKey": "writing_580",
+    "name": "Typeface AI"
+  },
+  {
+    "id": 173,
+    "toolKey": "writing_37",
+    "name": "文涌Effidit"
+  },
+  {
+    "id": 175,
+    "toolKey": "writing_24575",
+    "name": "树熊写作"
+  },
+  {
+    "id": 177,
+    "toolKey": "writing_711",
+    "name": "HeyFriday"
+  },
+  {
+    "id": 178,
+    "toolKey": "writing_36",
+    "name": "易撰"
+  },
+  {
+    "id": 179,
+    "toolKey": "writing_35",
+    "name": "智搜"
+  },
+  {
+    "id": 181,
+    "toolKey": "writing_1459",
+    "name": "字符狂飙"
+  },
+  {
+    "id": 182,
+    "toolKey": "writing_7424",
+    "name": "XPaper AI"
+  },
+  {
+    "id": 183,
+    "toolKey": "writing_7575",
+    "name": "悟智写作"
+  },
+  {
+    "id": 184,
+    "toolKey": "writing_1515",
+    "name": "讯飞智检"
+  },
+  {
+    "id": 186,
+    "toolKey": "writing_782",
+    "name": "ContentBot"
+  },
+  {
+    "id": 191,
+    "toolKey": "writing_258",
+    "name": "Texta"
+  },
+  {
+    "id": 194,
+    "toolKey": "writing_33",
+    "name": "WPS智能写作"
+  },
+  {
+    "id": 197,
+    "toolKey": "writing_7510",
+    "name": "Smodin AI Research Paper"
+  },
+  {
+    "id": 198,
+    "toolKey": "writing_1065",
+    "name": "ParagraphAI"
+  },
+  {
+    "id": 201,
+    "toolKey": "writing_127",
+    "name": "Reword"
+  },
+  {
+    "id": 202,
+    "toolKey": "writing_1067",
+    "name": "Elephas"
+  },
+  {
+    "id": 204,
+    "toolKey": "writing_7418",
+    "name": "PaperBetter AI"
+  },
+  {
+    "id": 206,
+    "toolKey": "writing_7364",
+    "name": "范文喵"
+  },
+  {
+    "id": 207,
+    "toolKey": "writing_7512",
+    "name": "小微智能论文"
+  },
+  {
+    "id": 208,
+    "toolKey": "writing_7371",
+    "name": "笔杆论文"
+  },
+  {
+    "id": 209,
+    "toolKey": "writing_7507",
+    "name": "AI论文君"
+  },
+  {
+    "id": 211,
+    "toolKey": "writing_204",
+    "name": "ProWritingAid"
+  },
+  {
+    "id": 213,
+    "toolKey": "writing_198",
+    "name": "Yaara"
+  },
+  {
+    "id": 216,
+    "toolKey": "writing_202",
+    "name": "NeuralText"
+  },
+  {
+    "id": 218,
+    "toolKey": "writing_158",
+    "name": "TextCortex"
+  },
+  {
+    "id": 219,
+    "toolKey": "writing_10977",
+    "name": "星火网文助手"
+  },
+  {
+    "id": 222,
+    "toolKey": "writing_1265",
+    "name": "Mark Copy"
+  },
+  {
+    "id": 223,
+    "toolKey": "image_common_3382",
+    "name": "堆友AI反应堆"
+  },
+  {
+    "id": 226,
+    "toolKey": "image_common_17330",
+    "name": "阿贝智能"
+  },
+  {
+    "id": 227,
+    "toolKey": "image_common_14579",
+    "name": "吐司AI"
+  },
+  {
+    "id": 228,
+    "toolKey": "image_common_63503",
+    "name": "造点AI"
+  },
+  {
+    "id": 229,
+    "toolKey": "image_common_56061",
+    "name": "RunningHub"
+  },
+  {
+    "id": 232,
+    "toolKey": "image_common_4749",
+    "name": "秒画"
+  },
+  {
+    "id": 233,
+    "toolKey": "image_common_2976",
+    "name": "WHEE"
+  },
+  {
+    "id": 234,
+    "toolKey": "image_common_70059",
+    "name": "呜哩"
+  },
+  {
+    "id": 235,
+    "toolKey": "image_common_60138",
+    "name": "insMind"
+  },
+  {
+    "id": 237,
+    "toolKey": "image_common_71738",
+    "name": "咖图AI"
+  },
+  {
+    "id": 238,
+    "toolKey": "image_common_70659",
+    "name": "视觉工厂"
+  },
+  {
+    "id": 239,
+    "toolKey": "image_common_70073",
+    "name": "秒绘AI"
+  },
+  {
+    "id": 240,
+    "toolKey": "image_common_68984",
+    "name": "妙话AI"
+  },
+  {
+    "id": 241,
+    "toolKey": "image_common_27837",
+    "name": "炉米Lumi"
+  },
+  {
+    "id": 242,
+    "toolKey": "image_common_56504",
+    "name": "Kira"
+  },
+  {
+    "id": 243,
+    "toolKey": "image_common_693",
+    "name": "Ribbet.ai"
+  },
+  {
+    "id": 244,
+    "toolKey": "image_common_29264",
+    "name": "万相营造"
+  },
+  {
+    "id": 245,
+    "toolKey": "image_common_1418",
+    "name": "悟空图像PhotoSir"
+  },
+  {
+    "id": 246,
+    "toolKey": "image_common_4177",
+    "name": "360智图"
+  },
+  {
+    "id": 248,
+    "toolKey": "image_common_14173",
+    "name": "如果相机"
+  },
+  {
+    "id": 249,
+    "toolKey": "image_common_678",
+    "name": "ARC"
+  },
+  {
+    "id": 256,
+    "toolKey": "image_common_18073",
+    "name": "Vmake AI"
+  },
+  {
+    "id": 259,
+    "toolKey": "image_common_18081",
+    "name": "Kacha AI"
+  },
+  {
+    "id": 260,
+    "toolKey": "image_common_15479",
+    "name": "PicTech AI"
+  },
+  {
+    "id": 261,
+    "toolKey": "image_common_109",
+    "name": "Hotpot.ai"
+  },
+  {
+    "id": 262,
+    "toolKey": "image_common_15972",
+    "name": "IconGen"
+  },
+  {
+    "id": 263,
+    "toolKey": "image_common_1936",
+    "name": "言之画"
+  },
+  {
+    "id": 264,
+    "toolKey": "image_common_24248",
+    "name": "百度智能云一念"
+  },
+  {
+    "id": 267,
+    "toolKey": "image_common_1607",
+    "name": "秘塔捉捉猫"
+  },
+  {
+    "id": 268,
+    "toolKey": "image_common_2305",
+    "name": "志设"
+  },
+  {
+    "id": 269,
+    "toolKey": "image_common_12769",
+    "name": "奇域AI"
+  },
+  {
+    "id": 270,
+    "toolKey": "image_common_5198",
+    "name": "触手AI绘画"
+  },
+  {
+    "id": 272,
+    "toolKey": "image_common_58",
+    "name": "Canva AI图像生成"
+  },
+  {
+    "id": 276,
+    "toolKey": "image_common_4009",
+    "name": "简单AI"
+  },
+  {
+    "id": 277,
+    "toolKey": "image_common_11123",
+    "name": "摩笔马良"
+  },
+  {
+    "id": 278,
+    "toolKey": "image_common_12987",
+    "name": "Exactly.ai"
+  },
+  {
+    "id": 279,
+    "toolKey": "image_common_2505",
+    "name": "画宇宙"
+  },
+  {
+    "id": 280,
+    "toolKey": "image_common_2342",
+    "name": "6pen Art"
+  },
+  {
+    "id": 281,
+    "toolKey": "image_common_1818",
+    "name": "创客贴AI画匠"
+  },
+  {
+    "id": 284,
+    "toolKey": "image_common_4212",
+    "name": "网易AI创意工坊"
+  },
+  {
+    "id": 286,
+    "toolKey": "image_common_2762",
+    "name": "Freepik AI Image Generator"
+  },
+  {
+    "id": 287,
+    "toolKey": "image_common_151",
+    "name": "Stockimg AI"
+  },
+  {
+    "id": 288,
+    "toolKey": "image_common_3529",
+    "name": "Stable Doodle"
+  },
+  {
+    "id": 289,
+    "toolKey": "image_common_2676",
+    "name": "175FUN"
+  },
+  {
+    "id": 290,
+    "toolKey": "image_common_2803",
+    "name": "行者AI美术"
+  },
+  {
+    "id": 291,
+    "toolKey": "image_common_2571",
+    "name": "Skybox AI"
+  },
+  {
+    "id": 292,
+    "toolKey": "image_common_976",
+    "name": "Facet"
+  },
+  {
+    "id": 293,
+    "toolKey": "image_common_299",
+    "name": "Relight"
+  },
+  {
+    "id": 295,
+    "toolKey": "video_13114",
+    "name": "Showrunner"
+  },
+  {
+    "id": 296,
+    "toolKey": "video_13554",
+    "name": "即构数智人"
+  },
+  {
+    "id": 300,
+    "toolKey": "video_13049",
+    "name": "Magicam"
+  },
+  {
+    "id": 302,
+    "toolKey": "video_9622",
+    "name": "Clipfly"
+  },
+  {
+    "id": 304,
+    "toolKey": "video_4808",
+    "name": "Capsule"
+  },
+  {
+    "id": 311,
+    "toolKey": "video_8530",
+    "name": "Typeframes"
+  },
+  {
+    "id": 312,
+    "toolKey": "video_361",
+    "name": "DreamFace"
+  },
+  {
+    "id": 313,
+    "toolKey": "video_8525",
+    "name": "Mootion"
+  },
+  {
+    "id": 319,
+    "toolKey": "video_7162",
+    "name": "Anylang.ai"
+  },
+  {
+    "id": 325,
+    "toolKey": "video_9394",
+    "name": "录咖"
+  },
+  {
+    "id": 327,
+    "toolKey": "video_12247",
+    "name": "团队快剪"
+  },
+  {
+    "id": 328,
+    "toolKey": "video_12245",
+    "name": "鬼手剪辑GhostCut"
+  },
+  {
+    "id": 329,
+    "toolKey": "video_12246",
+    "name": "模力视频"
+  },
+  {
+    "id": 330,
+    "toolKey": "video_1500",
+    "name": "Gencraft"
+  },
+  {
+    "id": 332,
+    "toolKey": "video_236",
+    "name": "Veed Video Background Remover"
+  },
+  {
+    "id": 334,
+    "toolKey": "video_239",
+    "name": "BgRem"
+  },
+  {
+    "id": 337,
+    "toolKey": "video_238",
+    "name": "AVCLabs"
+  },
+  {
+    "id": 338,
+    "toolKey": "video_226",
+    "name": "Elai.io"
+  },
+  {
+    "id": 342,
+    "toolKey": "video_66771",
+    "name": "LiblibAI"
+  },
+  {
+    "id": 343,
+    "toolKey": "video_33687",
+    "name": "绘蛙AI视频"
+  },
+  {
+    "id": 345,
+    "toolKey": "video_61400",
+    "name": "堆友AI视频"
+  },
+  {
+    "id": 346,
+    "toolKey": "video_13065",
+    "name": "白日梦"
+  },
+  {
+    "id": 348,
+    "toolKey": "video_70438",
+    "name": "Pollo AI"
+  },
+  {
+    "id": 349,
+    "toolKey": "video_60378",
+    "name": "Keevx"
+  },
+  {
+    "id": 352,
+    "toolKey": "video_45413",
+    "name": "JoyPix"
+  },
+  {
+    "id": 353,
+    "toolKey": "video_48346",
+    "name": "海螺视频"
+  },
+  {
+    "id": 355,
+    "toolKey": "video_21718",
+    "name": "通义万相AI视频"
+  },
+  {
+    "id": 356,
+    "toolKey": "video_68669",
+    "name": "魔珐星云"
+  },
+  {
+    "id": 357,
+    "toolKey": "video_72345",
+    "name": "AdsTurbo AI"
+  },
+  {
+    "id": 358,
+    "toolKey": "video_70208",
+    "name": "献丑AI"
+  },
+  {
+    "id": 359,
+    "toolKey": "video_69647",
+    "name": "MochiAni"
+  },
+  {
+    "id": 360,
+    "toolKey": "video_66332",
+    "name": "TapNow"
+  },
+  {
+    "id": 361,
+    "toolKey": "video_59035",
+    "name": "Higgsfield"
+  },
+  {
+    "id": 362,
+    "toolKey": "video_68040",
+    "name": "雾象"
+  },
+  {
+    "id": 363,
+    "toolKey": "video_66554",
+    "name": "造次"
+  },
+  {
+    "id": 364,
+    "toolKey": "video_67673",
+    "name": "花生AI"
+  },
+  {
+    "id": 365,
+    "toolKey": "video_69946",
+    "name": "NextCut AI"
+  },
+  {
+    "id": 366,
+    "toolKey": "video_69629",
+    "name": "云幕同声"
+  },
+  {
+    "id": 367,
+    "toolKey": "video_63694",
+    "name": "萌动AI"
+  },
+  {
+    "id": 368,
+    "toolKey": "video_68087",
+    "name": "KomikoAI"
+  },
+  {
+    "id": 369,
+    "toolKey": "video_5560",
+    "name": "即创"
+  },
+  {
+    "id": 370,
+    "toolKey": "video_59040",
+    "name": "智谱清影"
+  },
+  {
+    "id": 371,
+    "toolKey": "video_65041",
+    "name": "内容特工队"
+  },
+  {
+    "id": 372,
+    "toolKey": "video_62311",
+    "name": "磁力开创"
+  },
+  {
+    "id": 373,
+    "toolKey": "video_69913",
+    "name": "A2E"
+  },
+  {
+    "id": 377,
+    "toolKey": "video_63158",
+    "name": "SekoTalk"
+  },
+  {
+    "id": 378,
+    "toolKey": "video_63255",
+    "name": "通义灵眸"
+  },
+  {
+    "id": 380,
+    "toolKey": "video_52454",
+    "name": "Medeo"
+  },
+  {
+    "id": 381,
+    "toolKey": "video_59515",
+    "name": "Boba"
+  },
+  {
+    "id": 382,
+    "toolKey": "video_13455",
+    "name": "Dream Machine"
+  },
+  {
+    "id": 384,
+    "toolKey": "video_56039",
+    "name": "绘想"
+  },
+  {
+    "id": 385,
+    "toolKey": "video_13679",
+    "name": "Hedra"
+  },
+  {
+    "id": 386,
+    "toolKey": "video_14640",
+    "name": "Vozo"
+  },
+  {
+    "id": 387,
+    "toolKey": "video_11148",
+    "name": "Viggle"
+  },
+  {
+    "id": 389,
+    "toolKey": "video_55745",
+    "name": "万兴天幕"
+  },
+  {
+    "id": 390,
+    "toolKey": "video_50033",
+    "name": "妙播"
+  },
+  {
+    "id": 391,
+    "toolKey": "video_31155",
+    "name": "阶跃视频"
+  },
+  {
+    "id": 392,
+    "toolKey": "video_1880",
+    "name": "秒创"
+  },
+  {
+    "id": 393,
+    "toolKey": "video_43126",
+    "name": "元镜"
+  },
+  {
+    "id": 394,
+    "toolKey": "video_16753",
+    "name": "SkyReels"
+  },
+  {
+    "id": 396,
+    "toolKey": "video_23593",
+    "name": "神笔马良"
+  },
+  {
+    "id": 398,
+    "toolKey": "video_20030",
+    "name": "Flow Studio"
+  },
+  {
+    "id": 400,
+    "toolKey": "video_14162",
+    "name": "寻光"
+  },
+  {
+    "id": 401,
+    "toolKey": "video_16965",
+    "name": "Hotshot"
+  },
+  {
+    "id": 402,
+    "toolKey": "video_12586",
+    "name": "vivago.ai"
+  },
+  {
+    "id": 403,
+    "toolKey": "video_18010",
+    "name": "Humva"
+  },
+  {
+    "id": 405,
+    "toolKey": "video_8662",
+    "name": "Stable Video"
+  },
+  {
+    "id": 406,
+    "toolKey": "video_15182",
+    "name": "OneStory"
+  },
+  {
+    "id": 407,
+    "toolKey": "video_13667",
+    "name": "Noisee AI"
+  },
+  {
+    "id": 408,
+    "toolKey": "video_1237",
+    "name": "万兴播爆"
+  },
+  {
+    "id": 409,
+    "toolKey": "video_14067",
+    "name": "Vimi"
+  },
+  {
+    "id": 410,
+    "toolKey": "video_24359",
+    "name": "Etna"
+  },
+  {
+    "id": 411,
+    "toolKey": "video_24161",
+    "name": "艺映AI"
+  },
+  {
+    "id": 412,
+    "toolKey": "video_23891",
+    "name": "LensGo"
+  },
+  {
+    "id": 415,
+    "toolKey": "video_6718",
+    "name": "WinkStudio"
+  },
+  {
+    "id": 416,
+    "toolKey": "video_23943",
+    "name": "VMagic"
+  },
+  {
+    "id": 417,
+    "toolKey": "video_19680",
+    "name": "讯飞虚拟人"
+  },
+  {
+    "id": 418,
+    "toolKey": "video_24851",
+    "name": "飞影数字人"
+  },
+  {
+    "id": 419,
+    "toolKey": "video_22195",
+    "name": "Video Studio"
+  },
+  {
+    "id": 420,
+    "toolKey": "video_16633",
+    "name": "Pixfun"
+  },
+  {
+    "id": 422,
+    "toolKey": "video_16242",
+    "name": "YoYo"
+  },
+  {
+    "id": 426,
+    "toolKey": "video_11975",
+    "name": "曦灵数字人"
+  },
+  {
+    "id": 428,
+    "toolKey": "video_13802",
+    "name": "Duix"
+  },
+  {
+    "id": 429,
+    "toolKey": "video_14469",
+    "name": "场辞"
+  },
+  {
+    "id": 430,
+    "toolKey": "video_16086",
+    "name": "一起剪"
+  },
+  {
+    "id": 431,
+    "toolKey": "video_11245",
+    "name": "Spikes Studio"
+  },
+  {
+    "id": 432,
+    "toolKey": "video_10935",
+    "name": "Google Vids"
+  },
+  {
+    "id": 434,
+    "toolKey": "video_10195",
+    "name": "Gatekeep"
+  },
+  {
+    "id": 436,
+    "toolKey": "office_56314",
+    "name": "扣子PPT"
+  },
+  {
+    "id": 437,
+    "toolKey": "office_44612",
+    "name": "咔片PPT"
+  },
+  {
+    "id": 438,
+    "toolKey": "office_18998",
+    "name": "文多多AiPPT"
+  },
+  {
+    "id": 439,
+    "toolKey": "office_8840",
+    "name": "iSlide AIPPT"
+  },
+  {
+    "id": 441,
+    "toolKey": "office_63272",
+    "name": "Pi智能PPT"
+  },
+  {
+    "id": 442,
+    "toolKey": "office_35715",
+    "name": "稿定PPT"
+  },
+  {
+    "id": 443,
+    "toolKey": "office_7012",
+    "name": "笔格AIPPT"
+  },
+  {
+    "id": 444,
+    "toolKey": "office_14213",
+    "name": "笔灵AIPPT"
+  },
+  {
+    "id": 445,
+    "toolKey": "office_5037",
+    "name": "百度文库AI助手"
+  },
+  {
+    "id": 447,
+    "toolKey": "office_16885",
+    "name": "Napkin"
+  },
+  {
+    "id": 448,
+    "toolKey": "office_69545",
+    "name": "ChartGen"
+  },
+  {
+    "id": 449,
+    "toolKey": "office_68868",
+    "name": "Diagrimo"
+  },
+  {
+    "id": 450,
+    "toolKey": "office_67628",
+    "name": "飞象老师"
+  },
+  {
+    "id": 451,
+    "toolKey": "office_57522",
+    "name": "Kimi PPT助手"
+  },
+  {
+    "id": 454,
+    "toolKey": "office_69127",
+    "name": "课灵 PPT"
+  },
+  {
+    "id": 455,
+    "toolKey": "office_38231",
+    "name": "清言PPT"
+  },
+  {
+    "id": 456,
+    "toolKey": "office_14023",
+    "name": "万兴智演"
+  },
+  {
+    "id": 458,
+    "toolKey": "office_40174",
+    "name": "AiBiao"
+  },
+  {
+    "id": 461,
+    "toolKey": "office_366",
+    "name": "Powerpresent AI"
+  },
+  {
+    "id": 462,
+    "toolKey": "office_24210",
+    "name": "希沃白板"
+  },
+  {
+    "id": 463,
+    "toolKey": "office_24142",
+    "name": "秒出PPT"
+  },
+  {
+    "id": 468,
+    "toolKey": "office_7728",
+    "name": "轻竹办公"
+  },
+  {
+    "id": 469,
+    "toolKey": "office_1126",
+    "name": "Chronicle"
+  },
+  {
+    "id": 470,
+    "toolKey": "office_369",
+    "name": "Presentations.AI"
+  },
+  {
+    "id": 471,
+    "toolKey": "office_1225",
+    "name": "SlidesAI"
+  },
+  {
+    "id": 472,
+    "toolKey": "office_1228",
+    "name": "auxi"
+  },
+  {
+    "id": 473,
+    "toolKey": "office_15178",
+    "name": "AI灵感PPT"
+  },
+  {
+    "id": 475,
+    "toolKey": "agent_63774",
+    "name": "爱派AiPy"
+  },
+  {
+    "id": 479,
+    "toolKey": "agent_61123",
+    "name": "码上飞"
+  },
+  {
+    "id": 480,
+    "toolKey": "agent_54821",
+    "name": "金灵AI"
+  },
+  {
+    "id": 481,
+    "toolKey": "agent_66553",
+    "name": "OiiOii"
+  },
+  {
+    "id": 483,
+    "toolKey": "agent_62355",
+    "name": "Tbox"
+  },
+  {
+    "id": 484,
+    "toolKey": "agent_71899",
+    "name": "happycapy"
+  },
+  {
+    "id": 485,
+    "toolKey": "agent_66341",
+    "name": "Genspark"
+  },
+  {
+    "id": 486,
+    "toolKey": "agent_72152",
+    "name": "小云雀"
+  },
+  {
+    "id": 487,
+    "toolKey": "agent_51256",
+    "name": "Operator"
+  },
+  {
+    "id": 488,
+    "toolKey": "agent_66596",
+    "name": "GenFlow"
+  },
+  {
+    "id": 489,
+    "toolKey": "agent_70880",
+    "name": "OpenClaw"
+  },
+  {
+    "id": 490,
+    "toolKey": "agent_67498",
+    "name": "Lovart"
+  },
+  {
+    "id": 491,
+    "toolKey": "agent_52208",
+    "name": "Skywork"
+  },
+  {
+    "id": 492,
+    "toolKey": "agent_72406",
+    "name": "切问学术"
+  },
+  {
+    "id": 493,
+    "toolKey": "agent_68239",
+    "name": "Mixboard"
+  },
+  {
+    "id": 494,
+    "toolKey": "agent_71465",
+    "name": "memU Bot"
+  },
+  {
+    "id": 495,
+    "toolKey": "agent_71314",
+    "name": "元气AI Bot"
+  },
+  {
+    "id": 496,
+    "toolKey": "agent_70852",
+    "name": "WorkAny"
+  },
+  {
+    "id": 497,
+    "toolKey": "agent_59375",
+    "name": "Agnes AI"
+  },
+  {
+    "id": 498,
+    "toolKey": "agent_59644",
+    "name": "Seele AI"
+  },
+  {
+    "id": 499,
+    "toolKey": "agent_60312",
+    "name": "稿定AI社区"
+  },
+  {
+    "id": 500,
+    "toolKey": "agent_61891",
+    "name": "椒图AI"
+  },
+  {
+    "id": 501,
+    "toolKey": "agent_67279",
+    "name": "遨虾"
+  },
+  {
+    "id": 502,
+    "toolKey": "agent_69201",
+    "name": "亿话"
+  },
+  {
+    "id": 503,
+    "toolKey": "agent_67818",
+    "name": "Tago"
+  },
+  {
+    "id": 504,
+    "toolKey": "agent_67911",
+    "name": "FlowMuse AI"
+  },
+  {
+    "id": 505,
+    "toolKey": "agent_67677",
+    "name": "NeoDomain"
+  },
+  {
+    "id": 506,
+    "toolKey": "agent_60287",
+    "name": "MuleRun"
+  },
+  {
+    "id": 507,
+    "toolKey": "agent_64120",
+    "name": "Opera Neon"
+  },
+  {
+    "id": 508,
+    "toolKey": "agent_58360",
+    "name": "Seko"
+  },
+  {
+    "id": 509,
+    "toolKey": "agent_49771",
+    "name": "Fellou"
+  },
+  {
+    "id": 510,
+    "toolKey": "agent_53987",
+    "name": "Dia"
+  },
+  {
+    "id": 511,
+    "toolKey": "agent_60949",
+    "name": "TabTab"
+  },
+  {
+    "id": 512,
+    "toolKey": "agent_60693",
+    "name": "酷宣AI"
+  },
+  {
+    "id": 513,
+    "toolKey": "agent_64927",
+    "name": "月亮树AI选品"
+  },
+  {
+    "id": 514,
+    "toolKey": "agent_60115",
+    "name": "如此AI员工"
+  },
+  {
+    "id": 515,
+    "toolKey": "agent_58670",
+    "name": "MasterAgent"
+  },
+  {
+    "id": 516,
+    "toolKey": "agent_65208",
+    "name": "Teamo"
+  },
+  {
+    "id": 517,
+    "toolKey": "agent_58991",
+    "name": "SciMaster"
+  },
+  {
+    "id": 518,
+    "toolKey": "agent_58176",
+    "name": "Zeabur"
+  },
+  {
+    "id": 520,
+    "toolKey": "agent_57411",
+    "name": "FinGenius"
+  },
+  {
+    "id": 521,
+    "toolKey": "agent_57011",
+    "name": "RoboNeo"
+  },
+  {
+    "id": 522,
+    "toolKey": "agent_62815",
+    "name": "混沌Deep Innovation"
+  },
+  {
+    "id": 523,
+    "toolKey": "agent_51649",
+    "name": "MiniMax Agent"
+  },
+  {
+    "id": 524,
+    "toolKey": "agent_58161",
+    "name": "BrowserOS"
+  },
+  {
+    "id": 525,
+    "toolKey": "agent_57192",
+    "name": "CrePal"
+  },
+  {
+    "id": 526,
+    "toolKey": "agent_53327",
+    "name": "Jaaz"
+  },
+  {
+    "id": 527,
+    "toolKey": "agent_53726",
+    "name": "CoCo"
+  },
+  {
+    "id": 529,
+    "toolKey": "agent_56728",
+    "name": "Bobby"
+  },
+  {
+    "id": 530,
+    "toolKey": "agent_49421",
+    "name": "Suna"
+  },
+  {
+    "id": 531,
+    "toolKey": "agent_53175",
+    "name": "Fairies"
+  },
+  {
+    "id": 532,
+    "toolKey": "agent_54603",
+    "name": "FloweAI"
+  },
+  {
+    "id": 534,
+    "toolKey": "agent_53329",
+    "name": "CRIC深度智联"
+  },
+  {
+    "id": 535,
+    "toolKey": "agent_51248",
+    "name": "rabbitOS intern"
+  },
+  {
+    "id": 539,
+    "toolKey": "chat_14769",
+    "name": "逗逗AI"
+  },
+  {
+    "id": 540,
+    "toolKey": "chat_53747",
+    "name": "Kimi智能助手"
+  },
+  {
+    "id": 541,
+    "toolKey": "chat_1338",
+    "name": "千问"
+  },
+  {
+    "id": 546,
+    "toolKey": "chat_61432",
+    "name": "LongCat"
+  },
+  {
+    "id": 549,
+    "toolKey": "chat_41147",
+    "name": "华为小艺"
+  },
+  {
+    "id": 551,
+    "toolKey": "chat_64622",
+    "name": "百灵大模型"
+  },
+  {
+    "id": 552,
+    "toolKey": "chat_53373",
+    "name": "书生大模型"
+  },
+  {
+    "id": 555,
+    "toolKey": "chat_1784",
+    "name": "天工AI"
+  },
+  {
+    "id": 557,
+    "toolKey": "chat_16356",
+    "name": "Me.bot"
+  },
+  {
+    "id": 558,
+    "toolKey": "chat_21956",
+    "name": "Saylo"
+  },
+  {
+    "id": 563,
+    "toolKey": "chat_457",
+    "name": "Bing新必应"
+  },
+  {
+    "id": 564,
+    "toolKey": "chat_14989",
+    "name": "Koko AI"
+  },
+  {
+    "id": 565,
+    "toolKey": "chat_14310",
+    "name": "通义星尘"
+  },
+  {
+    "id": 566,
+    "toolKey": "chat_20683",
+    "name": "CueMe"
+  },
+  {
+    "id": 567,
+    "toolKey": "chat_17432",
+    "name": "造梦次元"
+  },
+  {
+    "id": 568,
+    "toolKey": "chat_15123",
+    "name": "Museland"
+  },
+  {
+    "id": 569,
+    "toolKey": "chat_23550",
+    "name": "百度AI助手"
+  },
+  {
+    "id": 572,
+    "toolKey": "chat_13251",
+    "name": "小黄蕉"
+  },
+  {
+    "id": 573,
+    "toolKey": "chat_9412",
+    "name": "冒泡鸭"
+  },
+  {
+    "id": 574,
+    "toolKey": "chat_37235",
+    "name": "J1 Assistant"
+  },
+  {
+    "id": 575,
+    "toolKey": "chat_14574",
+    "name": "Cici"
+  },
+  {
+    "id": 577,
+    "toolKey": "chat_8874",
+    "name": "Le Chat"
+  },
+  {
+    "id": 578,
+    "toolKey": "chat_2198",
+    "name": "百度AI伙伴"
+  },
+  {
+    "id": 579,
+    "toolKey": "chat_6290",
+    "name": "超级助理"
+  },
+  {
+    "id": 580,
+    "toolKey": "chat_4080",
+    "name": "钉钉·个人版"
+  },
+  {
+    "id": 581,
+    "toolKey": "chat_14297",
+    "name": "Wanderboat"
+  },
+  {
+    "id": 583,
+    "toolKey": "chat_4362",
+    "name": "Luca面壁露卡"
+  },
+  {
+    "id": 584,
+    "toolKey": "chat_5678",
+    "name": "元象XChat"
+  },
+  {
+    "id": 585,
+    "toolKey": "chat_6101",
+    "name": "ChitChop"
+  },
+  {
+    "id": 586,
+    "toolKey": "chat_3403",
+    "name": "魔搭GPT"
+  },
+  {
+    "id": 589,
+    "toolKey": "chat_2771",
+    "name": "TigerBot"
+  },
+  {
+    "id": 590,
+    "toolKey": "chat_3973",
+    "name": "Stable Chat"
+  },
+  {
+    "id": 592,
+    "toolKey": "chat_141",
+    "name": "Jasper Chat"
+  },
+  {
+    "id": 595,
+    "toolKey": "chat_139",
+    "name": "ChatSonic"
+  },
+  {
+    "id": 597,
+    "toolKey": "chat_163",
+    "name": "Whispr"
+  },
+  {
+    "id": 598,
+    "toolKey": "chat_1656",
+    "name": "Open Assistant"
+  },
+  {
+    "id": 599,
+    "toolKey": "chat_2122",
+    "name": "Pi"
+  },
+  {
+    "id": 603,
+    "toolKey": "chat_1608",
+    "name": "对话写作猫"
+  },
+  {
+    "id": 604,
+    "toolKey": "chat_4655",
+    "name": "应事AI"
+  },
+  {
+    "id": 606,
+    "toolKey": "coding_6519",
+    "name": "代码小浣熊"
+  },
+  {
+    "id": 615,
+    "toolKey": "coding_70432",
+    "name": "YouWare"
+  },
+  {
+    "id": 616,
+    "toolKey": "coding_69134",
+    "name": "Zcode"
+  },
+  {
+    "id": 618,
+    "toolKey": "coding_60798",
+    "name": "Lovable"
+  },
+  {
+    "id": 619,
+    "toolKey": "coding_65836",
+    "name": "CatPaw"
+  },
+  {
+    "id": 622,
+    "toolKey": "coding_64688",
+    "name": "iFlow CLI"
+  },
+  {
+    "id": 624,
+    "toolKey": "coding_48022",
+    "name": "Firebase Studio"
+  },
+  {
+    "id": 625,
+    "toolKey": "coding_69316",
+    "name": "InfCode"
+  },
+  {
+    "id": 626,
+    "toolKey": "coding_64617",
+    "name": "CodeFlicker"
+  },
+  {
+    "id": 627,
+    "toolKey": "coding_54400",
+    "name": "Clacky AI"
+  },
+  {
+    "id": 628,
+    "toolKey": "coding_20080",
+    "name": "Replit Agent"
+  },
+  {
+    "id": 629,
+    "toolKey": "coding_61842",
+    "name": "Warp Code"
+  },
+  {
+    "id": 630,
+    "toolKey": "coding_1616",
+    "name": "CodeWhisperer"
+  },
+  {
+    "id": 631,
+    "toolKey": "coding_57573",
+    "name": "Zread"
+  },
+  {
+    "id": 632,
+    "toolKey": "coding_39640",
+    "name": "Junie"
+  },
+  {
+    "id": 637,
+    "toolKey": "coding_7582",
+    "name": "DevChat"
+  },
+  {
+    "id": 641,
+    "toolKey": "coding_22307",
+    "name": "Twinny"
+  },
+  {
+    "id": 642,
+    "toolKey": "coding_12491",
+    "name": "Project IDX"
+  },
+  {
+    "id": 643,
+    "toolKey": "coding_55229",
+    "name": "华为云码道"
+  },
+  {
+    "id": 644,
+    "toolKey": "coding_938",
+    "name": "Sketch2Code"
+  },
+  {
+    "id": 645,
+    "toolKey": "coding_5256",
+    "name": "CodeFuse"
+  },
+  {
+    "id": 648,
+    "toolKey": "coding_12890",
+    "name": "驭码CodeRider"
+  },
+  {
+    "id": 649,
+    "toolKey": "coding_11414",
+    "name": "Duo Chat"
+  },
+  {
+    "id": 650,
+    "toolKey": "coding_12176",
+    "name": "CodeRabbit"
+  },
+  {
+    "id": 652,
+    "toolKey": "coding_10880",
+    "name": "Plandex"
+  },
+  {
+    "id": 654,
+    "toolKey": "coding_1908",
+    "name": "BLACKBOX AI"
+  },
+  {
+    "id": 655,
+    "toolKey": "coding_6690",
+    "name": "Solo"
+  },
+  {
+    "id": 658,
+    "toolKey": "coding_4794",
+    "name": "v0.app"
+  },
+  {
+    "id": 659,
+    "toolKey": "coding_2610",
+    "name": "Boxy"
+  },
+  {
+    "id": 660,
+    "toolKey": "coding_3051",
+    "name": "Quest AI"
+  },
+  {
+    "id": 664,
+    "toolKey": "coding_772",
+    "name": "AirOps"
+  },
+  {
+    "id": 665,
+    "toolKey": "coding_2325",
+    "name": "Imgcook"
+  },
+  {
+    "id": 666,
+    "toolKey": "coding_2051",
+    "name": "Deco"
+  },
+  {
+    "id": 667,
+    "toolKey": "coding_853",
+    "name": "Ghostwriter"
+  },
+  {
+    "id": 669,
+    "toolKey": "coding_933",
+    "name": "Locofy"
+  },
+  {
+    "id": 675,
+    "toolKey": "coding_114",
+    "name": "Fig"
+  },
+  {
+    "id": 679,
+    "toolKey": "coding_479",
+    "name": "AI Code Reviewer"
+  },
+  {
+    "id": 680,
+    "toolKey": "coding_112",
+    "name": "Visual Studio IntelliCode"
+  },
+  {
+    "id": 681,
+    "toolKey": "coding_115",
+    "name": "HeyCLI"
+  },
+  {
+    "id": 683,
+    "toolKey": "platform_64863",
+    "name": "响指HaiSnap"
+  },
+  {
+    "id": 685,
+    "toolKey": "platform_71548",
+    "name": "ZenMux"
+  },
+  {
+    "id": 686,
+    "toolKey": "platform_66477",
+    "name": "英博云AI算力"
+  },
+  {
+    "id": 687,
+    "toolKey": "platform_61081",
+    "name": "Google AI Studio"
+  },
+  {
+    "id": 688,
+    "toolKey": "platform_50019",
+    "name": "阿里云百炼"
+  },
+  {
+    "id": 689,
+    "toolKey": "platform_22341",
+    "name": "Zion"
+  },
+  {
+    "id": 690,
+    "toolKey": "platform_62594",
+    "name": "n8n"
+  },
+  {
+    "id": 691,
+    "toolKey": "platform_43304",
+    "name": "Dify"
+  },
+  {
+    "id": 692,
+    "toolKey": "platform_68455",
+    "name": "灵光"
+  },
+  {
+    "id": 693,
+    "toolKey": "platform_67000",
+    "name": "快马InsCode"
+  },
+  {
+    "id": 694,
+    "toolKey": "platform_54791",
+    "name": "BASE44"
+  },
+  {
+    "id": 695,
+    "toolKey": "platform_58318",
+    "name": "Refly"
+  },
+  {
+    "id": 696,
+    "toolKey": "platform_52393",
+    "name": "NoCode"
+  },
+  {
+    "id": 697,
+    "toolKey": "platform_71707",
+    "name": "数眼智能AI"
+  },
+  {
+    "id": 698,
+    "toolKey": "platform_68197",
+    "name": "SophNet"
+  },
+  {
+    "id": 699,
+    "toolKey": "platform_68111",
+    "name": "晨涧云"
+  },
+  {
+    "id": 700,
+    "toolKey": "platform_67872",
+    "name": "LLaMA-Factory Online"
+  },
+  {
+    "id": 701,
+    "toolKey": "platform_67775",
+    "name": "大模型实验室"
+  },
+  {
+    "id": 702,
+    "toolKey": "platform_67128",
+    "name": "APIMart"
+  },
+  {
+    "id": 703,
+    "toolKey": "platform_65534",
+    "name": "DMXAPI"
+  },
+  {
+    "id": 704,
+    "toolKey": "platform_64827",
+    "name": "小马算力"
+  },
+  {
+    "id": 705,
+    "toolKey": "platform_64715",
+    "name": "搭叩"
+  },
+  {
+    "id": 706,
+    "toolKey": "platform_62299",
+    "name": "CREAO"
+  },
+  {
+    "id": 707,
+    "toolKey": "platform_54796",
+    "name": "Make"
+  },
+  {
+    "id": 708,
+    "toolKey": "platform_15416",
+    "name": "Wordware"
+  },
+  {
+    "id": 709,
+    "toolKey": "platform_52953",
+    "name": "PPIO派欧云"
+  },
+  {
+    "id": 710,
+    "toolKey": "platform_16414",
+    "name": "蚂蚁百宝箱Tbox"
+  },
+  {
+    "id": 711,
+    "toolKey": "platform_60829",
+    "name": "WaveSpeedAI"
+  },
+  {
+    "id": 712,
+    "toolKey": "platform_48043",
+    "name": "模力方舟"
+  },
+  {
+    "id": 713,
+    "toolKey": "platform_62159",
+    "name": "LongCat开放平台"
+  },
+  {
+    "id": 714,
+    "toolKey": "platform_61576",
+    "name": "X-All in one"
+  },
+  {
+    "id": 716,
+    "toolKey": "platform_60619",
+    "name": "胜算云"
+  },
+  {
+    "id": 717,
+    "toolKey": "platform_29524",
+    "name": "智谱清流"
+  },
+  {
+    "id": 719,
+    "toolKey": "platform_24351",
+    "name": "SkyAgents"
+  },
+  {
+    "id": 720,
+    "toolKey": "platform_14871",
+    "name": "言犀智能体平台"
+  },
+  {
+    "id": 721,
+    "toolKey": "platform_36421",
+    "name": "魔乐社区"
+  },
+  {
+    "id": 722,
+    "toolKey": "platform_11786",
+    "name": "BetterYeah AI"
+  },
+  {
+    "id": 725,
+    "toolKey": "platform_8536",
+    "name": "天壤小白"
+  },
+  {
+    "id": 726,
+    "toolKey": "platform_61",
+    "name": "PyTorch"
+  },
+  {
+    "id": 727,
+    "toolKey": "platform_21961",
+    "name": "Gumloop"
+  },
+  {
+    "id": 728,
+    "toolKey": "platform_48",
+    "name": "TensorFlow"
+  },
+  {
+    "id": 729,
+    "toolKey": "platform_62",
+    "name": "Apache MXNet"
+  },
+  {
+    "id": 730,
+    "toolKey": "platform_60",
+    "name": "Scikit-learn"
+  },
+  {
+    "id": 731,
+    "toolKey": "platform_6853",
+    "name": "MLX"
+  },
+  {
+    "id": 732,
+    "toolKey": "platform_3969",
+    "name": "Label Studio"
+  },
+  {
+    "id": 733,
+    "toolKey": "platform_16684",
+    "name": "Chunkr"
+  },
+  {
+    "id": 734,
+    "toolKey": "platform_3013",
+    "name": "Vercel AI SDK"
+  },
+  {
+    "id": 735,
+    "toolKey": "platform_451",
+    "name": "Keras"
+  },
+  {
+    "id": 736,
+    "toolKey": "platform_64",
+    "name": "Caffe"
+  },
+  {
+    "id": 737,
+    "toolKey": "platform_780",
+    "name": "NumPy"
+  },
+  {
+    "id": 738,
+    "toolKey": "platform_1268",
+    "name": "DL4J"
+  },
+  {
+    "id": 739,
+    "toolKey": "platform_1276",
+    "name": "JAX"
+  },
+  {
+    "id": 740,
+    "toolKey": "platform_1273",
+    "name": "NLTK"
+  },
+  {
+    "id": 742,
+    "toolKey": "platform_1848",
+    "name": "Lightning AI"
+  },
+  {
+    "id": 743,
+    "toolKey": "platform_2625",
+    "name": "Leap"
+  },
+  {
+    "id": 744,
+    "toolKey": "platform_5581",
+    "name": "ChatDev"
+  },
+  {
+    "id": 745,
+    "toolKey": "platform_8970",
+    "name": "Anakin.ai"
+  },
+  {
+    "id": 747,
+    "toolKey": "design_10754",
+    "name": "135 AI排版"
+  },
+  {
+    "id": 748,
+    "toolKey": "design_56965",
+    "name": "Holopix AI"
+  },
+  {
+    "id": 751,
+    "toolKey": "design_13019",
+    "name": "创客贴AI"
+  },
+  {
+    "id": 752,
+    "toolKey": "design_40997",
+    "name": "Onlook"
+  },
+  {
+    "id": 754,
+    "toolKey": "design_15196",
+    "name": "魔力工作室"
+  },
+  {
+    "id": 755,
+    "toolKey": "design_28903",
+    "name": "蚂上有创意"
+  },
+  {
+    "id": 756,
+    "toolKey": "design_24811",
+    "name": "爱设计"
+  },
+  {
+    "id": 757,
+    "toolKey": "design_71123",
+    "name": "小墨鹰编辑器"
+  },
+  {
+    "id": 758,
+    "toolKey": "design_54633",
+    "name": "美间AI"
+  },
+  {
+    "id": 759,
+    "toolKey": "design_63488",
+    "name": "Calicat"
+  },
+  {
+    "id": 761,
+    "toolKey": "design_54629",
+    "name": "燕雀光年"
+  },
+  {
+    "id": 762,
+    "toolKey": "design_1414",
+    "name": "标小智LOGO生成器"
+  },
+  {
+    "id": 764,
+    "toolKey": "design_47746",
+    "name": "居然设计家"
+  },
+  {
+    "id": 765,
+    "toolKey": "design_4487",
+    "name": "FigJam AI"
+  },
+  {
+    "id": 766,
+    "toolKey": "design_1986",
+    "name": "鹿班"
+  },
+  {
+    "id": 767,
+    "toolKey": "design_1087",
+    "name": "Magic Design"
+  },
+  {
+    "id": 768,
+    "toolKey": "design_17815",
+    "name": "简单设计"
+  },
+  {
+    "id": 769,
+    "toolKey": "design_14748",
+    "name": "笔格设计"
+  },
+  {
+    "id": 770,
+    "toolKey": "design_61515",
+    "name": "AI设计神器"
+  },
+  {
+    "id": 772,
+    "toolKey": "design_24579",
+    "name": "豆绘AI"
+  },
+  {
+    "id": 773,
+    "toolKey": "design_29186",
+    "name": "千图网"
+  },
+  {
+    "id": 774,
+    "toolKey": "design_12673",
+    "name": "Pictographic"
+  },
+  {
+    "id": 775,
+    "toolKey": "design_10172",
+    "name": "Fable Prism"
+  },
+  {
+    "id": 776,
+    "toolKey": "design_12503",
+    "name": "Wegic"
+  },
+  {
+    "id": 777,
+    "toolKey": "design_16181",
+    "name": "匠紫"
+  },
+  {
+    "id": 778,
+    "toolKey": "design_9977",
+    "name": "Collov AI"
+  },
+  {
+    "id": 779,
+    "toolKey": "design_14683",
+    "name": "包图网AI素材库"
+  },
+  {
+    "id": 780,
+    "toolKey": "design_25213",
+    "name": "易可图"
+  },
+  {
+    "id": 781,
+    "toolKey": "design_33149",
+    "name": "笔魂AI"
+  },
+  {
+    "id": 782,
+    "toolKey": "design_9772",
+    "name": "Creatie"
+  },
+  {
+    "id": 783,
+    "toolKey": "design_7993",
+    "name": "Kittl"
+  },
+  {
+    "id": 784,
+    "toolKey": "design_12132",
+    "name": "Dzine"
+  },
+  {
+    "id": 785,
+    "toolKey": "design_12026",
+    "name": "Ilus AI"
+  },
+  {
+    "id": 786,
+    "toolKey": "design_6309",
+    "name": "酷家乐AI"
+  },
+  {
+    "id": 788,
+    "toolKey": "design_3006",
+    "name": "LogoliveryAI"
+  },
+  {
+    "id": 789,
+    "toolKey": "design_4004",
+    "name": "Motiff 妙多"
+  },
+  {
+    "id": 790,
+    "toolKey": "design_6797",
+    "name": "Pimento"
+  },
+  {
+    "id": 792,
+    "toolKey": "design_2780",
+    "name": "Realibox AI"
+  },
+  {
+    "id": 800,
+    "toolKey": "design_9943",
+    "name": "千图设计室AI海报"
+  },
+  {
+    "id": 803,
+    "toolKey": "design_923",
+    "name": "Luma AI"
+  },
+  {
+    "id": 805,
+    "toolKey": "design_1989",
+    "name": "阿里云智能logo设计"
+  },
+  {
+    "id": 806,
+    "toolKey": "design_1957",
+    "name": "AIDesign"
+  },
+  {
+    "id": 809,
+    "toolKey": "design_172",
+    "name": "Illustroke"
+  },
+  {
+    "id": 810,
+    "toolKey": "design_168",
+    "name": "Eva Design System"
+  },
+  {
+    "id": 811,
+    "toolKey": "design_165",
+    "name": "Color Wheel"
+  },
+  {
+    "id": 813,
+    "toolKey": "design_162",
+    "name": "ColorMagic"
+  },
+  {
+    "id": 815,
+    "toolKey": "design_148",
+    "name": "Magician"
+  },
+  {
+    "id": 821,
+    "toolKey": "design_2048",
+    "name": "羚珑"
+  },
+  {
+    "id": 822,
+    "toolKey": "design_6749",
+    "name": "灵动AI"
+  },
+  {
+    "id": 825,
+    "toolKey": "audio_72331",
+    "name": "讯飞译制"
+  },
+  {
+    "id": 827,
+    "toolKey": "audio_68848",
+    "name": "Keevx声音克隆"
+  },
+  {
+    "id": 828,
+    "toolKey": "audio_14585",
+    "name": "琅琅配音"
+  },
+  {
+    "id": 829,
+    "toolKey": "audio_58128",
+    "name": "千音漫语"
+  },
+  {
+    "id": 830,
+    "toolKey": "audio_47748",
+    "name": "Noiz AI"
+  },
+  {
+    "id": 831,
+    "toolKey": "audio_45083",
+    "name": "MiniMax Audio"
+  },
+  {
+    "id": 832,
+    "toolKey": "audio_64880",
+    "name": "Tunee"
+  },
+  {
+    "id": 834,
+    "toolKey": "audio_71317",
+    "name": "Vemus未音"
+  },
+  {
+    "id": 835,
+    "toolKey": "audio_71063",
+    "name": "Nafy AI"
+  },
+  {
+    "id": 836,
+    "toolKey": "audio_69917",
+    "name": "TurboScribe"
+  },
+  {
+    "id": 837,
+    "toolKey": "audio_69537",
+    "name": "多维视界"
+  },
+  {
+    "id": 838,
+    "toolKey": "audio_36538",
+    "name": "天谱乐"
+  },
+  {
+    "id": 839,
+    "toolKey": "audio_18655",
+    "name": "音疯"
+  },
+  {
+    "id": 840,
+    "toolKey": "audio_46353",
+    "name": "Mureka"
+  },
+  {
+    "id": 841,
+    "toolKey": "audio_66271",
+    "name": "音潮"
+  },
+  {
+    "id": 842,
+    "toolKey": "audio_28064",
+    "name": "音剪"
+  },
+  {
+    "id": 843,
+    "toolKey": "audio_65354",
+    "name": "音秘"
+  },
+  {
+    "id": 844,
+    "toolKey": "audio_17999",
+    "name": "MemoAI"
+  },
+  {
+    "id": 846,
+    "toolKey": "audio_11026",
+    "name": "Udio"
+  },
+  {
+    "id": 848,
+    "toolKey": "audio_22182",
+    "name": "Lyrics Into Song AI"
+  },
+  {
+    "id": 849,
+    "toolKey": "audio_14885",
+    "name": "TTSMaker"
+  },
+  {
+    "id": 852,
+    "toolKey": "audio_11193",
+    "name": "Sonauto"
+  },
+  {
+    "id": 854,
+    "toolKey": "audio_6112",
+    "name": "大饼AI变声"
+  },
+  {
+    "id": 855,
+    "toolKey": "audio_11939",
+    "name": "Supertone Shift"
+  },
+  {
+    "id": 856,
+    "toolKey": "audio_596",
+    "name": "Producer.ai"
+  },
+  {
+    "id": 858,
+    "toolKey": "audio_2906",
+    "name": "网易云音乐·X Studio"
+  },
+  {
+    "id": 859,
+    "toolKey": "audio_16136",
+    "name": "刺鸟配音"
+  },
+  {
+    "id": 860,
+    "toolKey": "audio_12550",
+    "name": "Wondercraft"
+  },
+  {
+    "id": 861,
+    "toolKey": "audio_14961",
+    "name": "Fryderyk"
+  },
+  {
+    "id": 862,
+    "toolKey": "audio_12763",
+    "name": "Voicenotes"
+  },
+  {
+    "id": 863,
+    "toolKey": "audio_11254",
+    "name": "OptimizerAI"
+  },
+  {
+    "id": 865,
+    "toolKey": "audio_10145",
+    "name": "蓝藻AI"
+  },
+  {
+    "id": 866,
+    "toolKey": "audio_9548",
+    "name": "Deepgram"
+  },
+  {
+    "id": 867,
+    "toolKey": "audio_6630",
+    "name": "Audiobox"
+  },
+  {
+    "id": 869,
+    "toolKey": "audio_121",
+    "name": "IBM Watson文字转语音"
+  },
+  {
+    "id": 872,
+    "toolKey": "audio_6544",
+    "name": "快转字幕"
+  },
+  {
+    "id": 873,
+    "toolKey": "audio_2405",
+    "name": "悦音配音"
+  },
+  {
+    "id": 874,
+    "toolKey": "audio_10631",
+    "name": "音虫"
+  },
+  {
+    "id": 877,
+    "toolKey": "audio_1965",
+    "name": "BeatBot"
+  },
+  {
+    "id": 879,
+    "toolKey": "audio_254",
+    "name": "NaturalReader"
+  },
+  {
+    "id": 880,
+    "toolKey": "audio_120",
+    "name": "AssemblyAI"
+  },
+  {
+    "id": 885,
+    "toolKey": "audio_82",
+    "name": "Lemonaid"
+  },
+  {
+    "id": 888,
+    "toolKey": "audio_250",
+    "name": "Typecast"
+  },
+  {
+    "id": 889,
+    "toolKey": "audio_249",
+    "name": "Veed AI Voice Generator"
+  },
+  {
+    "id": 890,
+    "toolKey": "audio_247",
+    "name": "Clipchamp AI旁白生成器"
+  },
+  {
+    "id": 891,
+    "toolKey": "audio_404",
+    "name": "MetaVoice"
+  },
+  {
+    "id": 893,
+    "toolKey": "audio_403",
+    "name": "Voicemaker"
+  },
+  {
+    "id": 897,
+    "toolKey": "audio_398",
+    "name": "WellSaid"
+  },
+  {
+    "id": 899,
+    "toolKey": "audio_12837",
+    "name": "听脑AI"
+  },
+  {
+    "id": 900,
+    "toolKey": "audio_28201",
+    "name": "简单听记"
+  },
+  {
+    "id": 902,
+    "toolKey": "search_15309",
+    "name": "夸克AI"
+  },
+  {
+    "id": 903,
+    "toolKey": "search_58169",
+    "name": "玻尔"
+  },
+  {
+    "id": 905,
+    "toolKey": "search_14200",
+    "name": "心流"
+  },
+  {
+    "id": 906,
+    "toolKey": "search_35440",
+    "name": "点点"
+  },
+  {
+    "id": 908,
+    "toolKey": "search_62941",
+    "name": "纳米AI"
+  },
+  {
+    "id": 909,
+    "toolKey": "search_28907",
+    "name": "百度AI探索版"
+  },
+  {
+    "id": 912,
+    "toolKey": "search_11402",
+    "name": "博查AI搜索"
+  },
+  {
+    "id": 913,
+    "toolKey": "search_62394",
+    "name": "WisPaper"
+  },
+  {
+    "id": 914,
+    "toolKey": "search_15220",
+    "name": "CuspAI"
+  },
+  {
+    "id": 915,
+    "toolKey": "search_61089",
+    "name": "博简智慧专利"
+  },
+  {
+    "id": 916,
+    "toolKey": "search_15865",
+    "name": "链企AI"
+  },
+  {
+    "id": 918,
+    "toolKey": "search_14818",
+    "name": "问问小宇宙"
+  },
+  {
+    "id": 919,
+    "toolKey": "search_15211",
+    "name": "Dexa AI"
+  },
+  {
+    "id": 920,
+    "toolKey": "search_15156",
+    "name": "XAnswer"
+  },
+  {
+    "id": 922,
+    "toolKey": "search_15233",
+    "name": "AlphaSense"
+  },
+  {
+    "id": 923,
+    "toolKey": "search_11840",
+    "name": "Globe Explorer"
+  },
+  {
+    "id": 924,
+    "toolKey": "search_9857",
+    "name": "Reportify"
+  },
+  {
+    "id": 928,
+    "toolKey": "search_11853",
+    "name": "Searcholic"
+  },
+  {
+    "id": 931,
+    "toolKey": "search_11855",
+    "name": "ThinkAny"
+  },
+  {
+    "id": 932,
+    "toolKey": "search_11851",
+    "name": "Miku"
+  },
+  {
+    "id": 933,
+    "toolKey": "search_16377",
+    "name": "Qdrant"
+  },
+  {
+    "id": 934,
+    "toolKey": "search_14712",
+    "name": "Adot"
+  },
+  {
+    "id": 935,
+    "toolKey": "search_12880",
+    "name": "开搜AI"
+  },
+  {
+    "id": 936,
+    "toolKey": "models_68274",
+    "name": "Nano Banana"
+  },
+  {
+    "id": 937,
+    "toolKey": "models_60108",
+    "name": "Cherry Studio"
+  },
+  {
+    "id": 939,
+    "toolKey": "models_40982",
+    "name": "AnythingLLM"
+  },
+  {
+    "id": 941,
+    "toolKey": "models_71659",
+    "name": "讯飞星辰MaaS"
+  },
+  {
+    "id": 942,
+    "toolKey": "models_1487",
+    "name": "魔搭社区"
+  },
+  {
+    "id": 943,
+    "toolKey": "models_22232",
+    "name": "豆包大模型"
+  },
+  {
+    "id": 944,
+    "toolKey": "models_50603",
+    "name": "无阶未来"
+  },
+  {
+    "id": 945,
+    "toolKey": "models_1626",
+    "name": "AutoGPT"
+  },
+  {
+    "id": 948,
+    "toolKey": "models_1129",
+    "name": "OpenBMB"
+  },
+  {
+    "id": 950,
+    "toolKey": "models_12205",
+    "name": "GPT-4o"
+  },
+  {
+    "id": 953,
+    "toolKey": "models_50",
+    "name": "DALL·E 3"
+  },
+  {
+    "id": 954,
+    "toolKey": "models_1078",
+    "name": "文心大模型"
+  },
+  {
+    "id": 956,
+    "toolKey": "models_1083",
+    "name": "悟道"
+  },
+  {
+    "id": 957,
+    "toolKey": "models_6279",
+    "name": "MiracleVision奇想智能"
+  },
+  {
+    "id": 958,
+    "toolKey": "models_2147",
+    "name": "Gradio"
+  },
+  {
+    "id": 959,
+    "toolKey": "models_2141",
+    "name": "DeepFloyd IF"
+  },
+  {
+    "id": 961,
+    "toolKey": "models_1933",
+    "name": "序列猴子"
+  },
+  {
+    "id": 963,
+    "toolKey": "models_1079",
+    "name": "阿里巴巴M6"
+  },
+  {
+    "id": 964,
+    "toolKey": "models_2038",
+    "name": "Lamini"
+  },
+  {
+    "id": 965,
+    "toolKey": "models_1861",
+    "name": "StableLM"
+  },
+  {
+    "id": 966,
+    "toolKey": "models_1076",
+    "name": "Gen-2"
+  },
+  {
+    "id": 967,
+    "toolKey": "models_1520",
+    "name": "DeepSpeed"
+  },
+  {
+    "id": 968,
+    "toolKey": "models_1077",
+    "name": "PaLM 2"
+  },
+  {
+    "id": 969,
+    "toolKey": "models_1351",
+    "name": "Segment Anything（SAM）"
+  },
+  {
+    "id": 972,
+    "toolKey": "models_2113",
+    "name": "StableVicuna"
+  },
+  {
+    "id": 973,
+    "toolKey": "models_2240",
+    "name": "Watsonx.ai"
+  },
+  {
+    "id": 978,
+    "toolKey": "content-detect_00e41df7",
+    "name": "StudyCorgi ChatGPT Detector"
+  },
+  {
+    "id": 979,
+    "toolKey": "content-detect_3e714fa1",
+    "name": "AISEO AI Content Detector"
+  },
+  {
+    "id": 980,
+    "toolKey": "content-detect_2190dd15",
+    "name": "Proofig"
+  },
+  {
+    "id": 981,
+    "toolKey": "content-detect_2df8bb6b",
+    "name": "Writecream AI Content Detector"
+  },
+  {
+    "id": 982,
+    "toolKey": "content-detect_6f5eebe7",
+    "name": "睿信论文检测"
+  },
+  {
+    "id": 983,
+    "toolKey": "content-detect_4ef26af4",
+    "name": "挖错网"
+  },
+  {
+    "id": 984,
+    "toolKey": "content-detect_eb7a8dd6",
+    "name": "团象"
+  },
+  {
+    "id": 985,
+    "toolKey": "content-detect_1c9961ed",
+    "name": "AI Content Detector"
+  },
+  {
+    "id": 987,
+    "toolKey": "content-detect_34d27f27",
+    "name": "Winston AI"
+  },
+  {
+    "id": 989,
+    "toolKey": "learn_ebeadf22",
+    "name": "AI大学堂"
+  },
+  {
+    "id": 990,
+    "toolKey": "learn_a54b88af",
+    "name": "堆友AI学习"
+  },
+  {
+    "id": 991,
+    "toolKey": "learn_df9cb46a",
+    "name": "AI分享圈"
+  },
+  {
+    "id": 992,
+    "toolKey": "learn_a63a91b1",
+    "name": "OpenAI Academy"
+  },
+  {
+    "id": 993,
+    "toolKey": "learn_20a249b7",
+    "name": "Day of AI"
+  },
+  {
+    "id": 994,
+    "toolKey": "learn_707cccc1",
+    "name": "fast.ai"
+  },
+  {
+    "id": 995,
+    "toolKey": "learn_17e009c6",
+    "name": "学吧导航"
+  },
+  {
+    "id": 997,
+    "toolKey": "learn_5577f978",
+    "name": "动手学深度学习"
+  },
+  {
+    "id": 999,
+    "toolKey": "learn_4392dbba",
+    "name": "Generative AI for Beginners"
+  },
+  {
+    "id": 1000,
+    "toolKey": "learn_9f230b2c",
+    "name": "ML for Beginners"
+  },
+  {
+    "id": 1001,
+    "toolKey": "learn_21d18db9",
+    "name": "神经网络入门"
+  },
+  {
+    "id": 1002,
+    "toolKey": "learn_df9f22dc",
+    "name": "Trancy"
+  },
+  {
+    "id": 1003,
+    "toolKey": "learn_11854df6",
+    "name": "Reading Coach"
+  },
+  {
+    "id": 1005,
+    "toolKey": "learn_d317308a",
+    "name": "腾讯扣叮"
+  },
+  {
+    "id": 1006,
+    "toolKey": "learn_2388621b",
+    "name": "阿里云AI学习路线"
+  },
+  {
+    "id": 1007,
+    "toolKey": "learn_1ec93ca7",
+    "name": "Udacity AI学院"
+  },
+  {
+    "id": 1008,
+    "toolKey": "learn_56deee2c",
+    "name": "ShowMeAI知识社区"
+  },
+  {
+    "id": 1009,
+    "toolKey": "learn_19e47815",
+    "name": "txyz"
+  },
+  {
+    "id": 1012,
+    "toolKey": "eval_fe1742ed",
+    "name": "FlagEval"
+  },
+  {
+    "id": 1015,
+    "toolKey": "eval_73cd6ca2",
+    "name": "CMMLU"
+  },
+  {
+    "id": 1016,
+    "toolKey": "eval_0d9378ff",
+    "name": "MMBench"
+  },
+  {
+    "id": 1017,
+    "toolKey": "eval_844dce47",
+    "name": "LLMEval3"
+  },
+  {
+    "id": 1018,
+    "toolKey": "eval_bca25fb5",
+    "name": "H2O EvalGPT"
+  },
+  {
+    "id": 1019,
+    "toolKey": "eval_68b203bc",
+    "name": "PubMedQA"
+  },
+  {
+    "id": 1020,
+    "toolKey": "content-detect_a5ecd9b6",
+    "name": "朱雀AI检测"
+  },
+  {
+    "id": 1021,
+    "toolKey": "prompt_54bc7044",
+    "name": "幂简AI提示词商城"
+  },
+  {
+    "id": 1023,
+    "toolKey": "prompt_7e5e0de0",
+    "name": "Google AI提示词库"
+  },
+  {
+    "id": 1024,
+    "toolKey": "prompt_975b769b",
+    "name": "Stable Diffusion Prompt Book"
+  },
+  {
+    "id": 1025,
+    "toolKey": "prompt_c31e1bdf",
+    "name": "LocalBanana"
+  },
+  {
+    "id": 1026,
+    "toolKey": "prompt_41a519c5",
+    "name": "ClickPrompt"
+  },
+  {
+    "id": 1027,
+    "toolKey": "prompt_aa4bc7cc",
+    "name": "AI Prompt Generator"
+  },
+  {
+    "id": 1028,
+    "toolKey": "prompt_28ca469c",
+    "name": "AI Short"
+  },
+  {
+    "id": 1029,
+    "toolKey": "prompt_fbd368cf",
+    "name": "LangGPT"
+  },
+  {
+    "id": 1030,
+    "toolKey": "prompt_e29b1e46",
+    "name": "Generrated"
+  },
+  {
+    "id": 1032,
+    "toolKey": "prompt_8fec45b0",
+    "name": "PromptFolder"
+  },
+  {
+    "id": 1033,
+    "toolKey": "prompt_1e6c2cd6",
+    "name": "AI Prompt Genius"
+  },
+  {
+    "id": 1035,
+    "toolKey": "prompt_2ddd6f1d",
+    "name": "AI Prompt Library"
+  }
+]

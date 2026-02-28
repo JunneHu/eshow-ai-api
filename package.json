@@ -1,0 +1,53 @@
+{
+  "name": "big-data",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "setup": "node scripts/setup.js",
+    "reset-db": "node scripts/reset-db.js",
+    "test-db": "node scripts/test-db.js",
+    "generate-test-data": "node scripts/generate-operation-test-data.js",
+    "optimize-db": "node scripts/optimize-db.js",
+    "optimize-indexes": "node scripts/optimize-db.js indexes",
+    "cleanup-data": "node scripts/optimize-db.js cleanup",
+    "db-monitor": "node scripts/optimize-db.js monitor",
+    "data-report": "node scripts/optimize-db.js report",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/multer": "^3.0.2",
+    "axios": "^1.9.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "koa": "^2.16.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-cors": "^0.0.16",
+    "koa-jwt": "^4.0.4",
+    "koa-router": "^13.0.1",
+    "koa-static": "^5.0.0",
+    "koa-swagger-decorator": "^1.8.7",
+    "koa2-cors": "^2.0.6",
+    "koa2-swagger-ui": "^5.11.0",
+    "mysql2": "^3.13.0",
+    "nodemailer": "^7.0.4",
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.19.0",
+    "ws": "^8.19.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.3"
+  }
+}
