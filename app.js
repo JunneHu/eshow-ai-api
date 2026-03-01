@@ -3,13 +3,22 @@ const cors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
 const config = require("./config/config");
 const logger = require("./services/LoggerService");
+const errorHandler = require("./middleware/errorHandler");
+const { validate, schemas } = require("./middleware/validation");
+const registerHc = require("./routes/hc");
+const registerAuth = require("./routes/auth");
+const registerAds = require("./routes/ads");
+const registerEvents = require("./routes/events");
+const registerAnalytics = require("./routes/analytics");
+const registerNews = require("./routes/news");
+const registerComments = require("./routes/comments");
 // const axios = require("axios"); // 暂时不需要
 const { koaSwagger } = require("koa2-swagger-ui");
 const swaggerSpec = require("./swagger");
 // const { verifyToken } = require("./middleware/auth"); // 已禁用鉴权
 const Router = require("koa-router");
 const { testConnection, initDatabase, sequelize } = require("./config/database");
-const { syncModels, Tool, Category, User, Advertisement, ToolComment } = require("./models");
+const { syncModels, Tool, Category, User, Advertisement, ToolComment, News, NewsComment, EventLog } = require("./models");
 const serve = require("koa-static");
 const path = require("path");
 const fs = require("fs");
@@ -21,6 +30,11 @@ const { Op } = require("sequelize");
 const app = new Koa();
 const router = new Router();
 
+// 列表分页默认与上限（P1-3）
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 200;
+
 const ensureDirExists = (dirPath) => {
   try {
     fs.mkdirSync(dirPath, { recursive: true });
@@ -29,21 +43,83 @@ const ensureDirExists = (dirPath) => {
   }
 };
 
-// 上传：广告图片
+// ========================
+// 运营埋点：基础工具
+// ========================
+
+const EVENT_TYPE_WHITELIST = new Set([
+  "tool_view",
+  "tool_click_official",
+  "ad_view",
+  "ad_click",
+  "comment_submit",
+  "search",
+  "news_view",
+  "news_click",
+]);
+
+const canReportEvents = (() => {
+  // 轻量防刷：按 IP 做 60s 窗口限流
+  const WINDOW_MS = 60 * 1000;
+  const MAX_PER_WINDOW = 240;
+  const map = new Map();
+
+  return (ip) => {
+    const key = ip || "";
+    const now = Date.now();
+    const rec = map.get(key) || { ts: now, count: 0 };
+    if (now - rec.ts > WINDOW_MS) {
+      rec.ts = now;
+      rec.count = 0;
+    }
+    rec.count += 1;
+    map.set(key, rec);
+    if (rec.count > MAX_PER_WINDOW) {
+      return { ok: false, message: "请求过于频繁" };
+    }
+    return { ok: true };
+  };
+})();
+
+// 上传：广告图片（仅允许图片 MIME 类型）
 const ADS_UPLOAD_DIR = path.join(__dirname, "public", "uploads", "ads");
 ensureDirExists(ADS_UPLOAD_DIR);
+
+const ALLOWED_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MIME_TO_EXT = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+};
+const ALLOWED_IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
 const uploadAdsImage = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => cb(null, ADS_UPLOAD_DIR),
     filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname || "");
+      const ext = MIME_TO_EXT[file.mimetype] || ".jpg";
       const name = `${Date.now()}_${crypto.randomBytes(8).toString("hex")}${ext}`;
       cb(null, name);
     },
   }),
   limits: {
     fileSize: 5 * 1024 * 1024,
+  },
+  fileFilter: (req, file, cb) => {
+    const mimeOk = ALLOWED_IMAGE_MIMES.includes(file.mimetype);
+    const orig = file && file.originalname ? String(file.originalname) : "";
+    const ext = orig ? String(path.extname(orig)).toLowerCase() : "";
+    const extOk = !ext ? true : ALLOWED_IMAGE_EXTS.has(ext);
+
+    if (mimeOk && extOk) {
+      cb(null, true);
+      return;
+    }
+
+    const err = new Error("仅支持上传图片：JPG/JPEG、PNG、WebP、GIF");
+    err.status = 400;
+    cb(err);
   },
 });
 
@@ -54,7 +130,7 @@ app.use(
       const origin = ctx.request.header.origin;
       // 只在 debug 模式下打印 CORS 日志，避免日志刷屏
       if (config.server.logLevel === "debug") {
-        console.log('CORS请求来源:', origin);
+        logger.info("CORS请求来源:", origin);
       }
       
       // 从配置文件获取允许的来源列表
@@ -69,13 +145,13 @@ app.use(
         // 如果origin在允许列表中，返回origin
         if (allowedOrigins.includes(origin)) {
           if (config.server.logLevel === "debug") {
-            console.log('✅ CORS允许来源:', origin);
+            logger.info("CORS允许来源:", origin);
           }
           return origin;
         }
         // 开发环境下，如果不在列表中，也允许访问（方便调试）
         if (config.server.logLevel === "debug") {
-          console.log('⚠️ CORS开发模式允许未知来源:', origin);
+          logger.warn("CORS开发模式允许未知来源:", origin);
         }
         return origin;
       }
@@ -85,7 +161,7 @@ app.use(
         return origin;
       }
       if (config.server.logLevel === "debug") {
-        console.log('❌ CORS拒绝来源:', origin);
+        logger.info("CORS拒绝来源:", origin);
       }
       return false;
     },
@@ -115,6 +191,9 @@ app.use(
 
 // 使用koa-bodyparser中间件
 app.use(bodyParser());
+
+// 统一错误处理（捕获下游中间件与路由抛出的异常）
+app.use(errorHandler());
 
 // 生成 TraceId（32位十六进制，形如 5204d8e8d28c8bb058c865394c509db9）
 const generateTraceId = () => {
@@ -157,6 +236,74 @@ const authRequired = async (ctx, next) => {
   }
 };
 
+// 认证路由（拆分至 routes/auth.js）
+registerAuth(router, {
+  logger,
+  config,
+  User,
+  bcrypt,
+  jwt,
+  generateToken,
+  authRequired,
+  validate,
+  schemas,
+});
+registerAds(router, {
+  logger,
+  sequelize,
+  Advertisement,
+  authRequired,
+  uploadAdsImage,
+  validate,
+  schemas,
+  DEFAULT_PAGE,
+  MAX_PAGE_SIZE,
+});
+registerEvents(router, {
+  logger,
+  getClientIp,
+  canReportEvents,
+  safeString,
+  safeJson,
+  EVENT_TYPE_WHITELIST,
+  EventLog,
+});
+registerAnalytics(router, {
+  logger,
+  sequelize,
+  Op,
+  EventLog,
+  Tool,
+  News,
+  authRequired,
+});
+registerNews(router, {
+  logger,
+  sequelize,
+  Op,
+  News,
+  authRequired,
+  validate,
+  schemas,
+  DEFAULT_PAGE,
+  MAX_PAGE_SIZE,
+});
+registerComments(router, {
+  logger,
+  Op,
+  ToolComment,
+  NewsComment,
+  Tool,
+  News,
+  authRequired,
+  validate,
+  schemas,
+  listCommentsPublic,
+  createCommentPublic,
+  DEFAULT_PAGE,
+  MAX_PAGE_SIZE,
+});
+
 const isValidEmail = (email) => {
   if (!email) return true;
   const s = String(email).trim();
@@ -188,6 +335,206 @@ const buildCommentTree = (rows) => {
   });
   return roots;
 };
+
+function getClientIp(ctx) {
+  const xff = ctx.headers && (ctx.headers["x-forwarded-for"] || ctx.headers["X-Forwarded-For"]);
+  if (xff) return String(xff).split(",")[0].trim();
+  return (ctx.ip || (ctx.request && ctx.request.ip) || "").toString();
+}
+
+function safeString(v, maxLen) {
+  if (v === undefined || v === null) return null;
+  const s = String(v);
+  if (!maxLen) return s;
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
+function safeJson(v) {
+  if (v === undefined || v === null) return null;
+  if (typeof v === "object") return v;
+  try {
+    return JSON.parse(String(v));
+  } catch {
+    return { value: String(v) };
+  }
+}
+
+// 评论防刷：内存级限流（单实例有效）
+const COMMENT_POST_MIN_INTERVAL_MS = 15 * 1000;
+const COMMENT_POST_MAX_PER_MINUTE_PER_IP = 30;
+const commentPostLastAt = new Map(); // key: ip:toolId => lastAt
+const commentPostRecentByIp = new Map(); // key: ip => number[] timestamps
+
+const canPostComment = (ip, entityId) => {
+  const now = Date.now();
+
+  const key = `${ip}:${entityId}`;
+  const lastAt = commentPostLastAt.get(key);
+  if (lastAt && now - lastAt < COMMENT_POST_MIN_INTERVAL_MS) {
+    const waitMs = COMMENT_POST_MIN_INTERVAL_MS - (now - lastAt);
+    return {
+      ok: false,
+      message: `评论过于频繁，请 ${Math.ceil(waitMs / 1000)} 秒后再试`,
+    };
+  }
+
+  const windowMs = 60 * 1000;
+  const arr = commentPostRecentByIp.get(ip) || [];
+  const nextArr = arr.filter((t) => now - t < windowMs);
+  if (nextArr.length >= COMMENT_POST_MAX_PER_MINUTE_PER_IP) {
+    return { ok: false, message: "操作过于频繁，请稍后再试" };
+  }
+  nextArr.push(now);
+  commentPostRecentByIp.set(ip, nextArr);
+  commentPostLastAt.set(key, now);
+  return { ok: true };
+};
+
+// 公共：C 端评论列表（分页主评 + 一层回复树）
+async function listCommentsPublic(Model, entityIdKey, entityId, page, pageSize) {
+  const safePage = Math.max(1, Math.floor(Number.isFinite(page) ? page : DEFAULT_PAGE));
+  const safePageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Math.floor(Number.isFinite(pageSize) ? pageSize : DEFAULT_PAGE_SIZE)));
+  const offset = (safePage - 1) * safePageSize;
+  const where = { [entityIdKey]: entityId, status: true, parentId: null };
+
+  const rootsResult = await Model.findAndCountAll({
+    where,
+    order: [["createdAt", "DESC"]],
+    limit: safePageSize,
+    offset,
+  });
+
+  const roots = (rootsResult.rows || []).map((r) => (r && r.toJSON ? r.toJSON() : r));
+  const rootIds = roots.map((r) => r.id).filter(Boolean);
+
+  let replies = [];
+  if (rootIds.length > 0) {
+    const replyRows = await Model.findAll({
+      where: { [entityIdKey]: entityId, status: true, parentId: rootIds },
+      order: [["createdAt", "ASC"]],
+    });
+    replies = (replyRows || []).map((r) => (r && r.toJSON ? r.toJSON() : r));
+  }
+
+  const replyMap = new Map();
+  replies.forEach((r) => {
+    const pid = r.parentId;
+    if (!pid) return;
+    const arr = replyMap.get(pid) || [];
+    arr.push(r);
+    replyMap.set(pid, arr);
+  });
+
+  const list = roots.map((r) => ({
+    ...r,
+    replies: replyMap.get(r.id) || [],
+  }));
+
+  return {
+    list,
+    total: rootsResult.count || 0,
+    page: safePage,
+    pageSize: safePageSize,
+  };
+}
+
+// 公共：C 端创建评论（校验 + 限流 + 实体/父评论检查 + 创建）
+async function createCommentPublic(ctx, opts) {
+  const {
+    Model,
+    EntityModel,
+    entityIdKey,
+    entityId,
+    notFoundMessage,
+    parentBelongMessage,
+    logLabel,
+    checkEntity = () => true,
+  } = opts;
+
+  const body = ctx.request.body || {};
+  const parentIdRaw = body.parentId;
+  const pid =
+    parentIdRaw !== undefined && parentIdRaw !== null && String(parentIdRaw) !== ""
+      ? Number(parentIdRaw)
+      : null;
+  const finalContent = (body.content && String(body.content).trim()) || "";
+  const finalNickname = (body.nickname && String(body.nickname).trim()) || "";
+  const finalEmail = (body.email && String(body.email).trim()) || "";
+  const finalWebsite = sanitizeWebsite(body.website);
+
+  const entityIdNum = Number(entityId);
+  if (!Number.isFinite(entityIdNum) || entityIdNum <= 0 || !finalContent || !finalNickname) {
+    ctx.status = 400;
+    ctx.body = {
+      code: -1,
+      message: entityIdKey === "toolId" ? "参数错误：toolId、content、nickname 为必填" : "参数错误：newsId、content、nickname 为必填",
+    };
+    return true;
+  }
+  if (finalContent.length > 2000) {
+    ctx.status = 400;
+    ctx.body = { code: -1, message: "评论内容过长" };
+    return true;
+  }
+  if (finalNickname.length > 64) {
+    ctx.status = 400;
+    ctx.body = { code: -1, message: "昵称过长" };
+    return true;
+  }
+  if (!isValidEmail(finalEmail)) {
+    ctx.status = 400;
+    ctx.body = { code: -1, message: "邮箱格式不正确" };
+    return true;
+  }
+
+  const ip = getClientIp(ctx) || "";
+  const limitResult = canPostComment(ip, entityIdNum);
+  if (!limitResult.ok) {
+    ctx.status = 429;
+    ctx.body = { code: -1, message: limitResult.message || "操作过于频繁" };
+    return true;
+  }
+
+  try {
+    const entityRow = await EntityModel.findByPk(entityIdNum);
+    if (!entityRow || !checkEntity(entityRow)) {
+      ctx.status = 404;
+      ctx.body = { code: -1, message: notFoundMessage };
+      return true;
+    }
+
+    if (pid) {
+      const parent = await Model.findByPk(pid);
+      const parentEntityId = parent ? Number(parent[entityIdKey]) : null;
+      if (!parent || parentEntityId !== entityIdNum) {
+        ctx.status = 400;
+        ctx.body = { code: -1, message: parentBelongMessage };
+        return true;
+      }
+    }
+
+    const created = await Model.create({
+      [entityIdKey]: entityIdNum,
+      parentId: pid,
+      content: finalContent,
+      nickname: finalNickname,
+      email: finalEmail || null,
+      website: finalWebsite,
+      status: true,
+    });
+    ctx.status = 201;
+    ctx.body = { code: 0, message: "创建成功", data: created };
+    return true;
+  } catch (error) {
+    logger.error(logLabel, {
+      traceId: ctx.state && ctx.state.traceId,
+      error: error.message,
+    });
+    ctx.status = 500;
+    ctx.body = { code: -1, message: "创建评论失败" };
+    return true;
+  }
+}
 
 // TraceId & 请求日志中间件
 app.use(async (ctx, next) => {
@@ -249,7 +596,8 @@ app.use(async (ctx, next) => {
     });
     throw error;
   }
-});
+  }
+);
 
 // 数据库降级中间件：数据库不可用时，API 统一返回 503（避免启动即崩 / 大量 500）
 app.use(async (ctx, next) => {
@@ -326,491 +674,129 @@ app.use(async (ctx, next) => {
   }
 });
 
-// 认证相关接口（登录 / 注册 / 修改密码）
-// 注册
-router.post("/api/auth/register", async (ctx) => {
-  const { username, password } = ctx.request.body || {};
+// 创建工具
+router.post(
+  "/api/tools",
+  authRequired,
+  validate(schemas.createTool, { source: "body" }),
+  async (ctx) => {
+    const { id, name, description, websiteUrl, tags, detail, content, sort, categoryIds } =
+      ctx.request.body || {};
 
-  if (!username || !password) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "用户名和密码为必填项" };
-    return;
-  }
-
-  try {
-    const existed = await User.findOne({ where: { username } });
-    if (existed) {
+    if (!id || !name) {
       ctx.status = 400;
-      ctx.body = { code: -1, message: "用户名已存在" };
-      return;
-    }
-
-    const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      username,
-      passwordHash: hash,
-    });
-
-    const token = generateToken(user);
-
-    ctx.body = {
-      code: 0,
-      message: "注册成功",
-      data: {
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-        },
-      },
-    };
-  } catch (error) {
-    logger.error("Register failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "注册失败" };
-  }
-});
-
-// 登录
-router.post("/api/auth/login", async (ctx) => {
-  const { username, password } = ctx.request.body || {};
-
-  if (!username || !password) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "用户名和密码为必填项" };
-    return;
-  }
-
-  try {
-    const user = await User.findOne({ where: { username } });
-    if (!user) {
-      ctx.status = 400;
-      ctx.body = { code: -1, message: "用户名或密码错误" };
-      return;
-    }
-
-    const ok = await bcrypt.compare(password, user.passwordHash);
-    if (!ok) {
-      ctx.status = 400;
-      ctx.body = { code: -1, message: "用户名或密码错误" };
-      return;
-    }
-
-    const token = generateToken(user);
-    ctx.body = {
-      code: 0,
-      message: "登录成功",
-      data: {
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-        },
-      },
-    };
-  } catch (error) {
-    logger.error("Login failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "登录失败" };
-  }
-});
-
-// 修改密码（需要登录）
-router.post("/api/auth/change-password", authRequired, async (ctx) => {
-  const { oldPassword, newPassword } = ctx.request.body || {};
-
-  if (!oldPassword || !newPassword) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "旧密码和新密码为必填项" };
-    return;
-  }
-
-  try {
-    const user = await User.findByPk(ctx.state.user.id);
-    if (!user) {
-      ctx.status = 401;
-      ctx.body = { code: -1, message: "用户不存在或已被删除" };
-      return;
-    }
-
-    const ok = await bcrypt.compare(oldPassword, user.passwordHash);
-    if (!ok) {
-      ctx.status = 400;
-      ctx.body = { code: -1, message: "旧密码不正确" };
-      return;
-    }
-
-    const hash = await bcrypt.hash(newPassword, 10);
-    user.passwordHash = hash;
-    await user.save();
-
-    ctx.body = { code: 0, message: "密码修改成功" };
-  } catch (error) {
-    logger.error("Change password failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "修改密码失败" };
-  }
-});
-
-// 工具相关接口（无需登录）
-// 广告相关接口（无需登录）
-
-// 上传广告图片
-router.post("/api/upload/ads-image", uploadAdsImage.single("file"), async (ctx) => {
-  const file = ctx.file;
-  if (!file) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "未获取到上传文件" };
-    return;
-  }
-
-  const relativePath = `/uploads/ads/${file.filename}`;
-  const url = `${ctx.origin}${relativePath}`;
-  ctx.body = {
-    code: 0,
-    message: "success",
-    data: {
-      path: relativePath,
-      url,
-    },
-  };
-});
-
-// 广告列表（后台管理用，可分页）
-router.get("/api/ads", async (ctx) => {
-  try {
-    const { page, pageSize, position, status } = ctx.query || {};
-    const p = page !== undefined ? Number(page) : undefined;
-    const ps = pageSize !== undefined ? Number(pageSize) : undefined;
-
-    const where = {};
-    if (position) where.position = String(position);
-    if (status !== undefined && status !== "") {
-      if (String(status) === "1" || String(status).toLowerCase() === "true") where.status = true;
-      if (String(status) === "0" || String(status).toLowerCase() === "false") where.status = false;
-    }
-
-    const order = [
-      [sequelize.literal("sort IS NULL"), "ASC"],
-      ["sort", "ASC"],
-      ["createdAt", "DESC"],
-    ];
-
-    if (Number.isFinite(p) && Number.isFinite(ps) && p && ps) {
-      const safePage = Math.max(1, Math.floor(p));
-      const safePageSize = Math.min(200, Math.max(1, Math.floor(ps)));
-      const offset = (safePage - 1) * safePageSize;
-
-      const result = await Advertisement.findAndCountAll({
-        where,
-        order,
-        limit: safePageSize,
-        offset,
-      });
-
       ctx.body = {
-        code: 0,
-        message: "success",
-        data: {
-          list: result.rows || [],
-          total: result.count || 0,
-          page: safePage,
-          pageSize: safePageSize,
-        },
+        code: -1,
+        message: "参数错误：id 和 name 为必填字段",
       };
       return;
     }
 
-    const list = await Advertisement.findAll({ where, order });
-    ctx.body = { code: 0, message: "success", data: list };
-  } catch (error) {
-    logger.error("List ads failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "获取广告列表失败" };
-  }
-});
-
-// 获取单个广告
-router.get("/api/ads/:id", async (ctx) => {
-  const { id } = ctx.params;
-  try {
-    const ad = await Advertisement.findByPk(id);
-    if (!ad) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "广告不存在" };
-      return;
-    }
-    ctx.body = { code: 0, message: "success", data: ad };
-  } catch (error) {
-    logger.error("Get ad failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "获取广告失败" };
-  }
-});
-
-// 创建广告
-router.post("/api/ads", async (ctx) => {
-  const { name, imageUrl, linkUrl, sort, position, displayType, status } = ctx.request.body || {};
-  if (!name || !imageUrl || !position) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "参数错误：name、imageUrl、position 为必填字段" };
-    return;
-  }
-  try {
-    const ad = await Advertisement.create({
-      name,
-      imageUrl,
-      linkUrl: linkUrl || null,
-      sort: typeof sort === "number" ? sort : sort !== undefined ? Number(sort) : null,
-      position,
-      displayType: displayType || "tile",
-      status: status === undefined ? true : Boolean(status),
-    });
-    ctx.status = 201;
-    ctx.body = { code: 0, message: "创建成功", data: ad };
-  } catch (error) {
-    logger.error("Create ad failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "创建广告失败" };
-  }
-});
-
-// 更新广告
-router.put("/api/ads/:id", async (ctx) => {
-  const { id } = ctx.params;
-  const { name, imageUrl, linkUrl, sort, position, displayType, status } = ctx.request.body || {};
-  try {
-    const ad = await Advertisement.findByPk(id);
-    if (!ad) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "广告不存在" };
-      return;
+    // 兼容老的 detail 结构：如果传了 detail 就把它序列化进 content
+    let finalContent = content || null;
+    if (!finalContent && detail) {
+      try {
+        finalContent = JSON.stringify(detail);
+      } catch (e) {
+        finalContent = null;
+      }
     }
 
-    ad.name = name !== undefined ? name : ad.name;
-    ad.imageUrl = imageUrl !== undefined ? imageUrl : ad.imageUrl;
-    ad.linkUrl = linkUrl !== undefined ? (linkUrl || null) : ad.linkUrl;
-    ad.position = position !== undefined ? position : ad.position;
-    ad.displayType = displayType !== undefined ? (displayType || "tile") : ad.displayType;
-    if (sort !== undefined) {
-      const n = typeof sort === "number" ? sort : Number(sort);
-      ad.sort = Number.isFinite(n) ? n : ad.sort;
-    }
-    if (status !== undefined) ad.status = Boolean(status);
-
-    await ad.save();
-    ctx.body = { code: 0, message: "更新成功", data: ad };
-  } catch (error) {
-    logger.error("Update ad failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "更新广告失败" };
-  }
-});
-
-// 删除广告
-router.delete("/api/ads/:id", async (ctx) => {
-  const { id } = ctx.params;
-  try {
-    const ad = await Advertisement.findByPk(id);
-    if (!ad) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "广告不存在" };
-      return;
-    }
-    await ad.destroy();
-    ctx.body = { code: 0, message: "删除成功" };
-  } catch (error) {
-    logger.error("Delete ad failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "删除广告失败" };
-  }
-});
-
-// C 端广告列表：按 position 查询启用广告
-router.get("/api/public/ads", async (ctx) => {
-  const { position } = ctx.query || {};
-  if (!position) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "参数错误：position 为必填" };
-    return;
-  }
-  try {
-    const list = await Advertisement.findAll({
-      where: { position: String(position), status: true },
-      order: [
-        [sequelize.literal("sort IS NULL"), "ASC"],
-        ["sort", "ASC"],
-        ["createdAt", "DESC"],
-      ],
-    });
-    ctx.body = { code: 0, message: "success", data: list };
-  } catch (error) {
-    logger.error("List public ads failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "获取广告失败" };
-  }
-});
-
-// 工具评论（无需登录）：列表 + 创建（支持回复）
-router.get("/api/public/tool-comments", async (ctx) => {
-  const { toolId } = ctx.query || {};
-  const tid = Number(toolId);
-  if (!Number.isFinite(tid) || tid <= 0) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "参数错误：toolId 为必填" };
-    return;
-  }
-  try {
-    const rows = await ToolComment.findAll({
-      where: { toolId: tid, status: true },
-      order: [
-        [sequelize.literal("parent_id IS NOT NULL"), "ASC"],
-        ["createdAt", "ASC"],
-      ],
-    });
-    const tree = buildCommentTree(rows);
-    ctx.body = { code: 0, message: "success", data: tree };
-  } catch (error) {
-    logger.error("List tool comments failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "获取评论失败" };
-  }
-});
-
-router.post("/api/public/tool-comments", async (ctx) => {
-  const { toolId, parentId, content, nickname, email, website } = ctx.request.body || {};
-  const tid = Number(toolId);
-  const pid = parentId !== undefined && parentId !== null && String(parentId) !== "" ? Number(parentId) : null;
-  const finalContent = content ? String(content).trim() : "";
-  const finalNickname = nickname ? String(nickname).trim() : "";
-  const finalEmail = email ? String(email).trim() : "";
-  const finalWebsite = sanitizeWebsite(website);
-
-  if (!Number.isFinite(tid) || tid <= 0 || !finalContent || !finalNickname) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "参数错误：toolId、content、nickname 为必填" };
-    return;
-  }
-  if (finalContent.length > 2000) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "评论内容过长" };
-    return;
-  }
-  if (finalNickname.length > 64) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "昵称过长" };
-    return;
-  }
-  if (!isValidEmail(finalEmail)) {
-    ctx.status = 400;
-    ctx.body = { code: -1, message: "邮箱格式不正确" };
-    return;
-  }
-
-  try {
-    const tool = await Tool.findByPk(tid);
-    if (!tool) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "工具不存在" };
-      return;
-    }
-
-    if (pid) {
-      const parent = await ToolComment.findByPk(pid);
-      if (!parent || Number(parent.toolId) !== tid) {
+    try {
+      const existed = await Tool.findOne({
+        where: {
+          [Op.or]: [{ toolKey: id }, { name }],
+        },
+      });
+      if (existed) {
         ctx.status = 400;
-        ctx.body = { code: -1, message: "父评论不存在或不属于该工具" };
+        ctx.body = {
+          code: -1,
+          message: existed.toolKey === id ? "工具ID已存在" : "工具名称已存在",
+        };
         return;
       }
+
+      const tool = await Tool.create({
+        toolKey: id,
+        name,
+        description,
+        websiteUrl,
+        tags,
+        content: finalContent,
+        sort: typeof sort === "number" ? sort : null,
+      });
+
+      // 分类关联：允许前端传 categoryIds，写入多对多关联表
+      if (Array.isArray(categoryIds)) {
+        const categories = await Category.findAll({
+          where: {
+            id: categoryIds,
+          },
+        });
+        await tool.setCategories(categories);
+      }
+
+      const result = await Tool.findByPk(tool.id, {
+        include: [{ model: Category }],
+      });
+
+      ctx.status = 201;
+      ctx.body = {
+        code: 0,
+        message: "创建成功",
+        data: result || tool,
+      };
+    } catch (error) {
+      if (
+        error &&
+        (error.name === "SequelizeUniqueConstraintError" ||
+          error.name === "SequelizeValidationError")
+      ) {
+        ctx.status = 400;
+        ctx.body = {
+          code: -1,
+          message: "工具ID或名称已存在",
+        };
+        return;
+      }
+      logger.error("Create tool failed", {
+        traceId: ctx.state && ctx.state.traceId,
+        error: error.message,
+      });
+      ctx.status = 500;
+      ctx.body = {
+        code: -1,
+        message: "创建工具失败",
+      };
     }
-
-    const created = await ToolComment.create({
-      toolId: tid,
-      parentId: pid,
-      content: finalContent,
-      nickname: finalNickname,
-      email: finalEmail || null,
-      website: finalWebsite,
-      status: true,
-    });
-    ctx.status = 201;
-    ctx.body = { code: 0, message: "创建成功", data: created };
-  } catch (error) {
-    logger.error("Create tool comment failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "创建评论失败" };
   }
-});
+);
 
-// 工具评论（后台管理）：分页列表 / 下线 / 删除
-router.get("/api/tool-comments", authRequired, async (ctx) => {
+// 工具列表（默认分页：page=1, pageSize=20，pageSize 上限 200）
+router.get("/api/tools", async (ctx) => {
   try {
-    const { page, pageSize, toolId, status, keyword } = ctx.query || {};
-    const p = page !== undefined ? Number(page) : 1;
-    const ps = pageSize !== undefined ? Number(pageSize) : 10;
-    const safePage = Math.max(1, Math.floor(p || 1));
-    const safePageSize = Math.min(200, Math.max(1, Math.floor(ps || 10)));
+    const pageRaw = ctx.query && ctx.query.page;
+    const pageSizeRaw = ctx.query && (ctx.query.pageSize || ctx.query.page_size);
+    const page = pageRaw !== undefined ? Number(pageRaw) : DEFAULT_PAGE;
+    const pageSize = pageSizeRaw !== undefined ? Number(pageSizeRaw) : DEFAULT_PAGE_SIZE;
+
+    const order = [
+      [sequelize.literal("sort IS NULL"), "ASC"], // 先按是否有排序值：有 sort 的在前
+      ["sort", "ASC"], // 再按 sort 从小到大
+      ["createdAt", "DESC"], // sort 相同时按创建时间倒序
+    ];
+
+    const safePage = Math.max(1, Math.floor(Number.isFinite(page) ? page : DEFAULT_PAGE));
+    const safePageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Math.floor(Number.isFinite(pageSize) ? pageSize : DEFAULT_PAGE_SIZE)));
     const offset = (safePage - 1) * safePageSize;
 
-    const where = {};
-    if (toolId) {
-      const tid = Number(toolId);
-      if (Number.isFinite(tid) && tid > 0) where.toolId = tid;
-    }
-    if (status !== undefined && status !== "") {
-      if (String(status) === "1" || String(status).toLowerCase() === "true") where.status = true;
-      if (String(status) === "0" || String(status).toLowerCase() === "false") where.status = false;
-    }
-    if (keyword) {
-      const kw = String(keyword).trim();
-      if (kw) {
-        where[Op.or] = [
-          { content: { [Op.like]: `%${kw}%` } },
-          { nickname: { [Op.like]: `%${kw}%` } },
-          { email: { [Op.like]: `%${kw}%` } },
-        ];
-      }
-    }
-
-    const result = await ToolComment.findAndCountAll({
-      where,
-      include: [{ model: Tool }],
-      order: [["createdAt", "DESC"]],
+    const result = await Tool.findAndCountAll({
+      include: [{ model: Category }],
+      order,
       limit: safePageSize,
       offset,
+      distinct: true,
     });
 
     ctx.body = {
@@ -822,204 +808,6 @@ router.get("/api/tool-comments", authRequired, async (ctx) => {
         page: safePage,
         pageSize: safePageSize,
       },
-    };
-  } catch (error) {
-    logger.error("List tool comments(admin) failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "获取评论列表失败" };
-  }
-});
-
-router.put("/api/tool-comments/:id", authRequired, async (ctx) => {
-  const { id } = ctx.params;
-  const { status } = ctx.request.body || {};
-  try {
-    const row = await ToolComment.findByPk(id);
-    if (!row) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "评论不存在" };
-      return;
-    }
-    if (status !== undefined) row.status = Boolean(status);
-    await row.save();
-    ctx.body = { code: 0, message: "更新成功", data: row };
-  } catch (error) {
-    logger.error("Update tool comment failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "更新评论失败" };
-  }
-});
-
-router.delete("/api/tool-comments/:id", authRequired, async (ctx) => {
-  const { id } = ctx.params;
-  try {
-    const row = await ToolComment.findByPk(id);
-    if (!row) {
-      ctx.status = 404;
-      ctx.body = { code: -1, message: "评论不存在" };
-      return;
-    }
-    await row.destroy();
-    ctx.body = { code: 0, message: "删除成功" };
-  } catch (error) {
-    logger.error("Delete tool comment failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = { code: -1, message: "删除评论失败" };
-  }
-});
-
-// 创建工具
-router.post("/api/tools", async (ctx) => {
-  const { id, name, description, websiteUrl, tags, detail, content, sort, categoryIds } =
-    ctx.request.body || {};
-
-  if (!id || !name) {
-    ctx.status = 400;
-    ctx.body = {
-      code: -1,
-      message: "参数错误：id 和 name 为必填字段",
-    };
-    return;
-  }
-
-  // 兼容老的 detail 结构：如果传了 detail 就把它序列化进 content
-  let finalContent = content || null;
-  if (!finalContent && detail) {
-    try {
-      finalContent = JSON.stringify(detail);
-    } catch (e) {
-      finalContent = null;
-    }
-  }
-
-  try {
-    const existed = await Tool.findOne({
-      where: {
-        [Op.or]: [{ toolKey: id }, { name }],
-      },
-    });
-    if (existed) {
-      ctx.status = 400;
-      ctx.body = {
-        code: -1,
-        message: existed.toolKey === id ? "工具ID已存在" : "工具名称已存在",
-      };
-      return;
-    }
-
-    const tool = await Tool.create({
-      toolKey: id,
-      name,
-      description,
-      websiteUrl,
-      tags,
-      content: finalContent,
-      sort: typeof sort === "number" ? sort : null,
-    });
-
-    // 分类关联：允许前端传 categoryIds，写入多对多关联表
-    if (Array.isArray(categoryIds)) {
-      const categories = await Category.findAll({
-        where: {
-          id: categoryIds,
-        },
-      });
-      await tool.setCategories(categories);
-    }
-
-    const result = await Tool.findByPk(tool.id, {
-      include: [{ model: Category }],
-    });
-
-    ctx.status = 201;
-    ctx.body = {
-      code: 0,
-      message: "创建成功",
-      data: result || tool,
-    };
-  } catch (error) {
-    if (
-      error &&
-      (error.name === "SequelizeUniqueConstraintError" ||
-        error.name === "SequelizeValidationError")
-    ) {
-      ctx.status = 400;
-      ctx.body = {
-        code: -1,
-        message: "工具ID或名称已存在",
-      };
-      return;
-    }
-    logger.error("Create tool failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = {
-      code: -1,
-      message: "创建工具失败",
-    };
-  }
-});
-
-// 工具列表
-router.get("/api/tools", async (ctx) => {
-  try {
-    const pageRaw = ctx.query && ctx.query.page;
-    const pageSizeRaw = ctx.query && (ctx.query.pageSize || ctx.query.page_size);
-    const page = pageRaw !== undefined ? Number(pageRaw) : undefined;
-    const pageSize = pageSizeRaw !== undefined ? Number(pageSizeRaw) : undefined;
-
-    const order = [
-      [sequelize.literal("sort IS NULL"), "ASC"], // 先按是否有排序值：有 sort 的在前
-      ["sort", "ASC"], // 再按 sort 从小到大
-      ["createdAt", "DESC"], // sort 相同时按创建时间倒序
-    ];
-
-    // 兼容：不传分页参数时，保持原先返回数组
-    if (Number.isFinite(page) && Number.isFinite(pageSize) && page && pageSize) {
-      const safePage = Math.max(1, Math.floor(page));
-      const safePageSize = Math.min(200, Math.max(1, Math.floor(pageSize)));
-      const offset = (safePage - 1) * safePageSize;
-
-      const result = await Tool.findAndCountAll({
-        include: [{ model: Category }],
-        order,
-        limit: safePageSize,
-        offset,
-        distinct: true,
-      });
-
-      ctx.body = {
-        code: 0,
-        message: "success",
-        data: {
-          list: result.rows || [],
-          total: result.count || 0,
-          page: safePage,
-          pageSize: safePageSize,
-        },
-      };
-      return;
-    }
-
-    const tools = await Tool.findAll({
-      include: [{ model: Category }],
-      order,
-    });
-    ctx.body = {
-      code: 0,
-      message: "success",
-      data: tools,
     };
   } catch (error) {
     logger.error("List tools failed", {
@@ -1068,29 +856,78 @@ router.get("/api/tools/:id", async (ctx) => {
 });
 
 // 更新工具
-router.put("/api/tools/:id", async (ctx) => {
-  const { id } = ctx.params;
-  const { name, description, websiteUrl, tags, content, sort, categoryIds } = ctx.request.body || {};
+router.put(
+  "/api/tools/:id",
+  authRequired,
+  validate(schemas.updateTool, { source: "body" }),
+  async (ctx) => {
+    const { id } = ctx.params;
+    const { name, description, websiteUrl, tags, content, sort, categoryIds } = ctx.request.body || {};
 
-  try {
-    const tool = await Tool.findByPk(id);
-    if (!tool) {
-      ctx.status = 404;
-      ctx.body = {
-        code: -1,
-        message: "工具不存在",
-      };
-      return;
-    }
+    try {
+      const tool = await Tool.findByPk(id);
+      if (!tool) {
+        ctx.status = 404;
+        ctx.body = {
+          code: -1,
+          message: "工具不存在",
+        };
+        return;
+      }
 
-    if (name !== undefined) {
-      const existedByName = await Tool.findOne({
-        where: {
-          name,
-          id: { [Op.ne]: tool.id },
-        },
+      if (name !== undefined) {
+        const existedByName = await Tool.findOne({
+          where: {
+            name,
+            id: { [Op.ne]: tool.id },
+          },
+        });
+        if (existedByName) {
+          ctx.status = 400;
+          ctx.body = {
+            code: -1,
+            message: "工具名称已存在",
+          };
+          return;
+        }
+      }
+
+      tool.name = name !== undefined ? name : tool.name;
+      tool.description = description !== undefined ? description : tool.description;
+      tool.websiteUrl = websiteUrl !== undefined ? websiteUrl : tool.websiteUrl;
+      tool.tags = tags !== undefined ? tags : tool.tags;
+      tool.content = content !== undefined ? content : tool.content;
+      if (sort !== undefined) {
+        tool.sort = typeof sort === "number" ? sort : tool.sort;
+      }
+
+      await tool.save();
+
+      // 分类关联：允许更新分类；空数组表示清空
+      if (Array.isArray(categoryIds)) {
+        const categories = await Category.findAll({
+          where: {
+            id: categoryIds,
+          },
+        });
+        await tool.setCategories(categories);
+      }
+
+      const result = await Tool.findByPk(tool.id, {
+        include: [{ model: Category }],
       });
-      if (existedByName) {
+
+      ctx.body = {
+        code: 0,
+        message: "更新成功",
+        data: result || tool,
+      };
+    } catch (error) {
+      if (
+        error &&
+        (error.name === "SequelizeUniqueConstraintError" ||
+          error.name === "SequelizeValidationError")
+      ) {
         ctx.status = 400;
         ctx.body = {
           code: -1,
@@ -1098,65 +935,21 @@ router.put("/api/tools/:id", async (ctx) => {
         };
         return;
       }
-    }
-
-    tool.name = name !== undefined ? name : tool.name;
-    tool.description = description !== undefined ? description : tool.description;
-    tool.websiteUrl = websiteUrl !== undefined ? websiteUrl : tool.websiteUrl;
-    tool.tags = tags !== undefined ? tags : tool.tags;
-    tool.content = content !== undefined ? content : tool.content;
-    if (sort !== undefined) {
-      tool.sort = typeof sort === "number" ? sort : tool.sort;
-    }
-
-    await tool.save();
-
-    // 分类关联：允许更新分类；空数组表示清空
-    if (Array.isArray(categoryIds)) {
-      const categories = await Category.findAll({
-        where: {
-          id: categoryIds,
-        },
+      logger.error("Update tool failed", {
+        traceId: ctx.state && ctx.state.traceId,
+        error: error.message,
       });
-      await tool.setCategories(categories);
-    }
-
-    const result = await Tool.findByPk(tool.id, {
-      include: [{ model: Category }],
-    });
-
-    ctx.body = {
-      code: 0,
-      message: "更新成功",
-      data: result || tool,
-    };
-  } catch (error) {
-    if (
-      error &&
-      (error.name === "SequelizeUniqueConstraintError" ||
-        error.name === "SequelizeValidationError")
-    ) {
-      ctx.status = 400;
+      ctx.status = 500;
       ctx.body = {
         code: -1,
-        message: "工具名称已存在",
+        message: "更新工具失败",
       };
-      return;
     }
-    logger.error("Update tool failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = {
-      code: -1,
-      message: "更新工具失败",
-    };
   }
-});
+);
 
 // 删除工具
-router.delete("/api/tools/:id", async (ctx) => {
+router.delete("/api/tools/:id", authRequired, async (ctx) => {
   const { id } = ctx.params;
   try {
     const tool = await Tool.findByPk(id);
@@ -1189,11 +982,12 @@ router.delete("/api/tools/:id", async (ctx) => {
 });
 
 // 分类相关接口（无需登录）
-// 分类列表
+// 分类列表（限制最多 200 条，避免无上限）
 router.get("/api/categories", async (ctx) => {
   try {
     const categories = await Category.findAll({
       order: [["id", "ASC"]],
+      limit: MAX_PAGE_SIZE,
     });
     ctx.body = {
       code: 0,
@@ -1214,40 +1008,45 @@ router.get("/api/categories", async (ctx) => {
 });
 
 // 创建分类
-router.post("/api/categories", async (ctx) => {
-  const { id, title } = ctx.request.body || {};
-  if (!id || !title) {
-    ctx.status = 400;
-    ctx.body = {
-      code: -1,
-      message: "参数错误：id（categoryKey）和 title 为必填字段",
-    };
-    return;
-  }
+router.post(
+  "/api/categories",
+  authRequired,
+  validate(schemas.createCategory, { source: "body" }),
+  async (ctx) => {
+    const { id, title } = ctx.request.body || {};
+    if (!id || !title) {
+      ctx.status = 400;
+      ctx.body = {
+        code: -1,
+        message: "参数错误：id（categoryKey）和 title 为必填字段",
+      };
+      return;
+    }
 
-  try {
-    const category = await Category.create({
-      categoryKey: id,
-      title,
-    });
-    ctx.status = 201;
-    ctx.body = {
-      code: 0,
-      message: "创建成功",
-      data: category,
-    };
-  } catch (error) {
-    logger.error("Create category failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = {
-      code: -1,
-      message: "创建分类失败",
-    };
+    try {
+      const category = await Category.create({
+        categoryKey: id,
+        title,
+      });
+      ctx.status = 201;
+      ctx.body = {
+        code: 0,
+        message: "创建成功",
+        data: category,
+      };
+    } catch (error) {
+      logger.error("Create category failed", {
+        traceId: ctx.state && ctx.state.traceId,
+        error: error.message,
+      });
+      ctx.status = 500;
+      ctx.body = {
+        code: -1,
+        message: "创建分类失败",
+      };
+    }
   }
-});
+);
 
 // 获取单个分类及关联工具
 router.get("/api/categories/:id", async (ctx) => {
@@ -1283,58 +1082,63 @@ router.get("/api/categories/:id", async (ctx) => {
 });
 
 // 更新分类（支持重命名和关联工具）
-router.put("/api/categories/:id", async (ctx) => {
-  const { id } = ctx.params;
-  const { title, toolIds } = ctx.request.body || {};
+router.put(
+  "/api/categories/:id",
+  authRequired,
+  validate(schemas.updateCategory, { source: "body" }),
+  async (ctx) => {
+    const { id } = ctx.params;
+    const { title, toolIds } = ctx.request.body || {};
 
-  try {
-    const category = await Category.findByPk(id);
-    if (!category) {
-      ctx.status = 404;
+    try {
+      const category = await Category.findByPk(id);
+      if (!category) {
+        ctx.status = 404;
+        ctx.body = {
+          code: -1,
+          message: "分类不存在",
+        };
+        return;
+      }
+
+      if (title !== undefined) {
+        category.title = title;
+        await category.save();
+      }
+
+      // 如果传了 toolIds，就重置这个分类下的工具关联
+      if (Array.isArray(toolIds)) {
+        const tools = await Tool.findAll({
+          where: { id: toolIds },
+        });
+        await category.setTools(tools);
+      }
+
+      const result = await Category.findByPk(id, {
+        include: [{ model: Tool }],
+      });
+
+      ctx.body = {
+        code: 0,
+        message: "更新成功",
+        data: result,
+      };
+    } catch (error) {
+      logger.error("Update category failed", {
+        traceId: ctx.state && ctx.state.traceId,
+        error: error.message,
+      });
+      ctx.status = 500;
       ctx.body = {
         code: -1,
-        message: "分类不存在",
+        message: "更新分类失败",
       };
-      return;
     }
-
-    if (title !== undefined) {
-      category.title = title;
-      await category.save();
-    }
-
-    // 如果传了 toolIds，就重置这个分类下的工具关联
-    if (Array.isArray(toolIds)) {
-      const tools = await Tool.findAll({
-        where: { id: toolIds },
-      });
-      await category.setTools(tools);
-    }
-
-    const result = await Category.findByPk(id, {
-      include: [{ model: Tool }],
-    });
-
-    ctx.body = {
-      code: 0,
-      message: "更新成功",
-      data: result,
-    };
-  } catch (error) {
-    logger.error("Update category failed", {
-      traceId: ctx.state && ctx.state.traceId,
-      error: error.message,
-    });
-    ctx.status = 500;
-    ctx.body = {
-      code: -1,
-      message: "更新分类失败",
-    };
   }
-});
+);
 
 // 删除分类（同时删除关联关系）
-router.delete("/api/categories/:id", async (ctx) => {
+router.delete("/api/categories/:id", authRequired, async (ctx) => {
   const { id } = ctx.params;
   try {
     const category = await Category.findByPk(id);
@@ -1370,16 +1174,28 @@ router.delete("/api/categories/:id", async (ctx) => {
 // 启动服务器
 const startServer = async () => {
   try {
+    // 生产环境必须显式配置核心密钥，避免使用默认值
+    if (config.server.environment === "production") {
+      if (!process.env.JWT_SECRET) {
+        logger.error("应用启动失败: 缺少 JWT_SECRET 环境变量（生产环境必须配置）");
+        process.exit(1);
+      }
+      if (!process.env.DB_PASSWORD) {
+        logger.error("应用启动失败: 缺少 DB_PASSWORD 环境变量（生产环境必须配置）");
+        process.exit(1);
+      }
+    }
+
     const tryInitDbOnce = async () => {
       const isConnected = await testConnection({ silent: true });
       if (!isConnected) {
-        console.warn("⚠️ 数据库连接失败：应用将继续启动（降级模式）");
+        logger.warn("数据库连接失败：应用将继续启动（降级模式）");
         return false;
       }
 
       const isInitialized = await initDatabase({ silent: true });
       if (!isInitialized) {
-        console.warn("⚠️ 数据库初始化失败：应用将继续启动（降级模式）");
+        logger.warn("数据库初始化失败：应用将继续启动（降级模式）");
         return false;
       }
 
@@ -1387,7 +1203,7 @@ const startServer = async () => {
         await syncModels();
         return true;
       } catch (e) {
-        console.warn("⚠️ 数据表同步失败：应用将继续启动（降级模式）", e && e.message);
+        logger.warn("数据表同步失败：应用将继续启动（降级模式）", e && e.message);
         return false;
       }
     };
@@ -1403,31 +1219,8 @@ const startServer = async () => {
       await tryInitDbOnce();
     }, Number.isFinite(retryMs) && retryMs > 0 ? retryMs : 10000);
 
-    // 健康检查路由
-    router.get('/hc', async (ctx) => {
-      try {
-        const { getDbState } = require("./config/database");
-        const state = getDbState();
-        const dbConnected = Boolean(state.ready);
-        ctx.body = {
-          status: 'ok',
-          timestamp: new Date().toISOString(),
-          uptime: process.uptime(),
-          environment: config.server.environment,
-          database: dbConnected ? 'connected' : 'disconnected',
-          databaseState: state,
-          version: '1.0.0'
-        };
-        ctx.status = dbConnected ? 200 : 503;
-      } catch (error) {
-        ctx.body = {
-          status: 'error',
-          timestamp: new Date().toISOString(),
-          error: error.message
-        };
-        ctx.status = 503;
-      }
-    });
+    // 健康检查路由（拆分至 routes/hc.js）
+    registerHc(router);
 
     // 挂载路由（工具 / 分类 / 健康检查等）
     app.use(router.routes());
@@ -1437,10 +1230,10 @@ const startServer = async () => {
     app.use(serve(path.join(__dirname, "public")));
 
     app.listen(config.server.port, () => {
-      console.log(`服务器运行在 localhost:${config.server.port} `);
+      logger.info(`服务器运行在 localhost:${config.server.port}`);
     });
   } catch (error) {
-    console.error("应用启动失败:", error);
+    logger.error("应用启动失败", { error: error && error.message, stack: error && error.stack });
     process.exit(1);
   }
 };

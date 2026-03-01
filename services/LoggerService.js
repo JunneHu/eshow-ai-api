@@ -25,13 +25,16 @@ const logger = {
   // 统一 API 请求日志
   logApiRequest(ctx, duration) {
     const traceId = ctx.state && ctx.state.traceId;
+    const isProduction = process.env.NODE_ENV === "production";
+    // 生产环境不记录完整 query，避免潜在敏感参数泄露
+    const safeQuery = isProduction ? undefined : ctx.query;
     loggerInstance.info("API Request", {
       traceId,
       method: ctx.method,
       path: ctx.path,
       status: ctx.status,
       duration,
-      query: ctx.query,
+      query: safeQuery,
     });
   },
 

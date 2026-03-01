@@ -102,10 +102,8 @@ const initDatabase = async (options = {}) => {
     dbState.lastErrorAt = null;
     if (!silent) console.log('✅ 数据库连接成功');
 
-    // 2. 同步数据库
-    await sequelize.sync({ force: false });
-    if (!silent) console.log('✅ 数据库同步成功');
-
+    // 注意：不在此处做 sequelize.sync。
+    // 表结构同步与初始化由上层的 models.syncModels() 统一负责，且具备生产环境禁用 alter 的开关。
     return true;
   } catch (error) {
     dbState.ready = false;

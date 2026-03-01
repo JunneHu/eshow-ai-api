@@ -63,6 +63,209 @@ const Tool = sequelize.define(
   }
 );
 
+// AI 资讯：用于 C 端展示与后台管理
+const News = sequelize.define(
+  "News",
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    title: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "资讯标题",
+    },
+    summary: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      comment: "资讯摘要",
+    },
+    coverImageUrl: {
+      type: DataTypes.STRING(2048),
+      allowNull: true,
+      field: "cover_image_url",
+      comment: "封面图",
+    },
+    sourceUrl: {
+      type: DataTypes.STRING(2048),
+      allowNull: true,
+      field: "source_url",
+      comment: "来源链接",
+    },
+    content: {
+      type: DataTypes.TEXT("long"),
+      allowNull: true,
+      comment: "正文内容（支持富文本）",
+    },
+    publishAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: "publish_at",
+      comment: "发布时间（可空，空表示未发布）",
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      comment: "是否启用/展示",
+    },
+  },
+  {
+    tableName: "news",
+    underscored: true,
+    timestamps: true,
+    comment: "AI 资讯表",
+  }
+);
+
+// 资讯评论：支持游客评论 + 回复（树形/一层回复分页模式与工具评论一致）
+const NewsComment = sequelize.define(
+  "NewsComment",
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    newsId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+      field: "news_id",
+      comment: "所属资讯ID",
+    },
+    parentId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      field: "parent_id",
+      comment: "父评论ID（为空表示主评论）",
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      comment: "评论内容",
+    },
+    nickname: {
+      type: DataTypes.STRING(64),
+      allowNull: false,
+      comment: "昵称",
+    },
+    email: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+      comment: "邮箱",
+    },
+    website: {
+      type: DataTypes.STRING(1024),
+      allowNull: true,
+      comment: "网站",
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      comment: "是否展示（后台可下线）",
+    },
+  },
+  {
+    tableName: "news_comments",
+    underscored: true,
+    timestamps: true,
+    comment: "资讯评论表（游客评论/回复）",
+    indexes: [
+      { fields: ["newsId", "status"] },
+      { fields: ["parentId"] },
+      { fields: ["createdAt"] },
+    ],
+  }
+);
+
+// 运营埋点事件日志：用于 PV/点击/曝光/评论等行为统计
+const EventLog = sequelize.define(
+  "EventLog",
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    eventType: {
+      type: DataTypes.STRING(64),
+      allowNull: false,
+      field: "event_type",
+      comment: "事件类型（如 tool_view/ad_click/comment_submit 等）",
+    },
+    distinctId: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+      field: "distinct_id",
+      comment: "匿名用户标识（localStorage 持久化）",
+    },
+    toolId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      field: "tool_id",
+      comment: "工具ID（可空）",
+    },
+    adId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      field: "ad_id",
+      comment: "广告ID（可空）",
+    },
+    newsId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      field: "news_id",
+      comment: "资讯ID（可空，用于 news_view/news_click/comment_submit 资讯评论）。若 event_logs 表已存在，请执行: ALTER TABLE event_logs ADD COLUMN news_id INT UNSIGNED NULL AFTER ad_id;",
+    },
+    position: {
+      type: DataTypes.STRING(128),
+      allowNull: true,
+      comment: "广告位/位置（如 home_top/tool_detail_bottom）",
+    },
+    path: {
+      type: DataTypes.STRING(512),
+      allowNull: true,
+      comment: "页面路径/URL（可空）",
+    },
+    props: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      comment: "事件附加属性（JSON）",
+    },
+    ip: {
+      type: DataTypes.STRING(64),
+      allowNull: true,
+      comment: "客户端IP",
+    },
+    ua: {
+      type: DataTypes.STRING(1024),
+      allowNull: true,
+      comment: "User-Agent",
+    },
+    referer: {
+      type: DataTypes.STRING(1024),
+      allowNull: true,
+      comment: "Referer",
+    },
+  },
+  {
+    tableName: "event_logs",
+    underscored: true,
+    timestamps: true,
+    comment: "运营埋点事件日志表",
+    indexes: [
+      { fields: ["createdAt", "eventType"] },
+      { fields: ["eventType"] },
+      { fields: ["toolId"] },
+      { fields: ["adId"] },
+      { fields: ["newsId"] },
+    ],
+  }
+);
+
 // 工具评论：支持游客评论 + 回复（树形）
 const ToolComment = sequelize.define(
   "ToolComment",
@@ -116,6 +319,11 @@ const ToolComment = sequelize.define(
     underscored: true,
     timestamps: true,
     comment: "工具评论表（游客评论/回复）",
+    indexes: [
+      { fields: ["toolId", "status"] },
+      { fields: ["parentId"] },
+      { fields: ["createdAt"] },
+    ],
   }
 );
 
@@ -282,6 +490,21 @@ ToolComment.belongsTo(ToolComment, {
   foreignKey: "parent_id",
 });
 
+News.hasMany(NewsComment, {
+  foreignKey: "news_id",
+});
+NewsComment.belongsTo(News, {
+  foreignKey: "news_id",
+});
+NewsComment.hasMany(NewsComment, {
+  as: "replies",
+  foreignKey: "parent_id",
+});
+NewsComment.belongsTo(NewsComment, {
+  as: "parent",
+  foreignKey: "parent_id",
+});
+
 // 默认分类（来自 mock-tools.json 中的 categories）
 const DEFAULT_CATEGORIES = [
   { categoryKey: "writing", title: "AI写作工具" },
@@ -303,9 +526,10 @@ const DEFAULT_CATEGORIES = [
 ];
 
 const syncModels = async () => {
-  // 开发阶段使用 alter: true，自动对齐表结构（新增字段/表）
-  // 线上环境建议使用迁移工具而不是自动 alter
-  await sequelize.sync({ alter: true });
+  // 生产环境禁用 alter，仅开发环境可开启；表结构变更请用迁移脚本（如 scripts/add-news-id-to-event-logs.js）
+  const isProduction = process.env.NODE_ENV === "production";
+  const syncAlter = !isProduction && process.env.DB_SYNC_ALTER !== "false";
+  await sequelize.sync({ alter: syncAlter });
 
   // 为历史工具回填排序值：默认使用数据库 id
   await Tool.update(
@@ -336,5 +560,8 @@ module.exports = {
   ToolCategory,
   Advertisement,
   ToolComment,
+  News,
+  NewsComment,
+  EventLog,
   syncModels,
 };

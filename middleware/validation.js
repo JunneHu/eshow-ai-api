@@ -3,6 +3,24 @@
  */
 const Joi = require('joi');
 
+const urlOptional = Joi.string().uri().allow('', null);
+
+// 认证相关验证规则
+const authSchemas = {
+  register: Joi.object({
+    username: Joi.string().min(1).max(64).required(),
+    password: Joi.string().min(1).required(),
+  }),
+  login: Joi.object({
+    username: Joi.string().min(1).max(64).required(),
+    password: Joi.string().min(1).required(),
+  }),
+  changePassword: Joi.object({
+    oldPassword: Joi.string().min(1).required(),
+    newPassword: Joi.string().min(1).required(),
+  }),
+};
+
 // 通用验证规则
 const commonSchemas = {
   pagination: Joi.object({
@@ -19,6 +37,91 @@ const commonSchemas = {
   appId: Joi.object({
     appId: Joi.string().required()
   })
+};
+
+// 业务相关验证规则
+const bizSchemas = {
+  createNews: Joi.object({
+    title: Joi.string().min(1).max(255).required(),
+    summary: Joi.string().allow('', null).optional(),
+    coverImageUrl: urlOptional.optional(),
+    sourceUrl: urlOptional.optional(),
+    content: Joi.string().allow('', null).optional(),
+    publishAt: Joi.alternatives().try(Joi.date().iso(), Joi.string()).allow(null, '').optional(),
+    status: Joi.boolean().optional(),
+  }),
+  updateNews: Joi.object({
+    title: Joi.string().min(1).max(255).optional(),
+    summary: Joi.string().allow('', null).optional(),
+    coverImageUrl: urlOptional.optional(),
+    sourceUrl: urlOptional.optional(),
+    content: Joi.string().allow('', null).optional(),
+    publishAt: Joi.alternatives().try(Joi.date().iso(), Joi.string()).allow(null, '').optional(),
+    status: Joi.boolean().optional(),
+  }),
+
+  createAd: Joi.object({
+    name: Joi.string().min(1).max(255).required(),
+    imageUrl: urlOptional.required(),
+    linkUrl: urlOptional.optional(),
+    sort: Joi.alternatives().try(Joi.number(), Joi.string()).allow(null, '').optional(),
+    position: Joi.string().min(1).max(128).required(),
+    displayType: Joi.string().allow('', null).optional(),
+    status: Joi.boolean().optional(),
+  }),
+  updateAd: Joi.object({
+    name: Joi.string().min(1).max(255).optional(),
+    imageUrl: urlOptional.optional(),
+    linkUrl: urlOptional.optional(),
+    sort: Joi.alternatives().try(Joi.number(), Joi.string()).allow(null, '').optional(),
+    position: Joi.string().min(1).max(128).optional(),
+    displayType: Joi.string().allow('', null).optional(),
+    status: Joi.boolean().optional(),
+  }),
+
+  createTool: Joi.object({
+    id: Joi.string().min(1).max(128).required(),
+    name: Joi.string().min(1).max(255).required(),
+    description: Joi.string().allow('', null).optional(),
+    websiteUrl: urlOptional.optional(),
+    tags: Joi.any().optional(),
+    detail: Joi.any().optional(),
+    content: Joi.any().optional(),
+    sort: Joi.alternatives().try(Joi.number(), Joi.string()).allow(null, '').optional(),
+    categoryIds: Joi.array().items(Joi.number().integer().min(1)).optional(),
+  }),
+  updateTool: Joi.object({
+    name: Joi.string().min(1).max(255).optional(),
+    description: Joi.string().allow('', null).optional(),
+    websiteUrl: urlOptional.optional(),
+    tags: Joi.any().optional(),
+    content: Joi.any().optional(),
+    sort: Joi.alternatives().try(Joi.number(), Joi.string()).allow(null, '').optional(),
+    categoryIds: Joi.array().items(Joi.number().integer().min(1)).optional(),
+  }),
+
+  createCategory: Joi.object({
+    id: Joi.string().min(1).max(128).required(),
+    title: Joi.string().min(1).max(255).required(),
+  }),
+  updateCategory: Joi.object({
+    title: Joi.string().min(1).max(255).optional(),
+    toolIds: Joi.array().items(Joi.number().integer().min(1)).optional(),
+  }),
+
+  createPublicComment: Joi.object({
+    toolId: Joi.number().integer().min(1).optional(),
+    newsId: Joi.number().integer().min(1).optional(),
+    parentId: Joi.number().integer().min(1).allow(null).optional(),
+    content: Joi.string().min(1).max(2000).required(),
+    nickname: Joi.string().min(1).max(64).required(),
+    email: Joi.string().email().allow('', null).optional(),
+    website: urlOptional.optional(),
+  }).or('toolId', 'newsId'),
+
+  updateCommentStatus: Joi.object({
+    status: Joi.boolean().required(),
+  }),
 };
 
 // 事件相关验证规则
@@ -94,7 +197,11 @@ const validate = (schema, options = {}) => {
   return async (ctx, next) => {
     try {
       const source = options.source || 'body'; // body, query, params
-      const data = ctx[source];
+      let data;
+      if (source === 'body') data = (ctx.request && ctx.request.body) || {};
+      else if (source === 'query') data = ctx.query || {};
+      else if (source === 'params') data = ctx.params || {};
+      else data = ctx[source];
       
       // 执行验证
       const { error, value } = schema.validate(data, {
@@ -106,7 +213,7 @@ const validate = (schema, options = {}) => {
       if (error) {
         ctx.status = 400;
         ctx.body = {
-          code: 400,
+          code: -1,
           message: '请求参数验证失败',
           errors: error.details.map(detail => ({
             field: detail.path.join('.'),
@@ -116,15 +223,24 @@ const validate = (schema, options = {}) => {
         };
         return;
       }
-      
+
       // 将验证后的数据放回原位置
-      ctx[source] = value;
+      if (source === 'body') {
+        ctx.request.body = value;
+      } else if (source === 'query') {
+        ctx.query = value;
+      } else if (source === 'params') {
+        ctx.params = value;
+      } else {
+        ctx[source] = value;
+      }
       await next();
     } catch (err) {
-      console.error('Validation middleware error:', err);
+      const logger = require('../services/LoggerService');
+      logger.error('Validation middleware error', { error: err && err.message });
       ctx.status = 500;
       ctx.body = {
-        code: 500,
+        code: -1,
         message: '参数验证服务异常'
       };
     }
@@ -135,8 +251,10 @@ const validate = (schema, options = {}) => {
 module.exports = {
   validate,
   schemas: {
+    ...authSchemas,
     ...commonSchemas,
     ...eventSchemas,
-    ...analyticsSchemas
-  }
+    ...analyticsSchemas,
+    ...bizSchemas,
+  },
 };
